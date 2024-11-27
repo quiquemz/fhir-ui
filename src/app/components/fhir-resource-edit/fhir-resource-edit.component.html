@@ -1,0 +1,28 @@
+<h2 style="margin: 12px 0;">{{resourceType}}</h2>
+
+<div class="row gap align-items-start">
+    <mat-form-field class="col-12">
+        <mat-label>Resource</mat-label>
+        <textarea cdkTextareaAutosize
+                  [(ngModel)]="resourceAsJson"
+                  (ngModelChange)="updateResource()"
+                  matInput></textarea>
+    </mat-form-field>
+</div>
+
+<div style="width: 100%; text-align: right;">
+    <button mat-stroked-button
+            (click)="goToDetail()"
+            class="cx-button-with-icon"
+            color="accent">
+        <mat-icon class="cx-icon-in-button">cancel</mat-icon>
+        Cancel
+    </button>
+    <button mat-flat-button
+            (click)="saveResource()"
+            class="cx-button-with-icon"
+            color="accent">
+        <mat-icon class="cx-icon-in-button">save</mat-icon>
+        Save {{resourceType}}
+    </button>
+</div>

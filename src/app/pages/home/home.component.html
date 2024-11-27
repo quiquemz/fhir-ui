@@ -1,0 +1,18 @@
+<h2>PDMS</h2>
+<section class="features">
+	<h3>Resources</h3>
+	<ul>
+		@for (resource of resources; track $index) {
+			<li>
+				<a [routerLink]="['/', resource.resourceType]">{{ resource.resourceType }}</a>
+			</li>
+		}
+	</ul>
+</section>
+<section class="documentation">
+	<h2>API Documentation</h2>
+	<p>
+		Interested in integrating our API into your application? Check out our documentation and get started!
+		<a routerLink="/openapi">Go to API Documentation</a>
+	</p>
+</section>

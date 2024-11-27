@@ -1,0 +1,71 @@
+<div class="resource-list-container">
+	<cx-table-container [tableLoading]="loading">
+		<cx-table-toolbar>
+			@if (patientIdentifierSearchPrefix) {
+				<cx-search-bar
+					placeholder="Search by Patient Identifier"
+					[debouncedTime]="2000"
+					(search)="searchByPatientIdentifier($event)" />
+			}
+		</cx-table-toolbar>
+
+		<cx-table-with-pagination
+			[data]="entries"
+			[initialTableColumnsOrder]="initialTableColumnsOrder"
+			[paginatorPageIndex]="pageIndex"
+			[paginatorTotalRecordsCount]="totalRecords"
+			(paginatorChange)="updatePagination($event)"
+			(rowClicked)="internalGoToDetail($event)"
+			matSort
+			[sorting]="sorting"
+			(sortChange)="sort($event)"
+			[showTableRowHover]="true">
+			@for (column of columns; track column) {
+				<ng-container matColumnDef="{{ column.columnDef }}">
+					<mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.sortBy">
+						<span class="cx-title-text">{{ column.header }}</span>
+						@if (column.filters.length > 0) {
+							<cx-table-filter
+								columnDef="{{ column.columnDef }}"
+								filterHeaderText="{{ column.header }}"
+								[filterOptions]="column.filters"
+								(filterSelectionChange)="updateFilters($event, $index)"></cx-table-filter>
+						}
+					</mat-header-cell>
+					<mat-cell *matCellDef="let resource">{{  column.cell(resource) }}</mat-cell>
+				</ng-container>
+
+				<ng-container
+					cxDropdownColumn="{{ column.columnDef }}"
+					[cxOptionalColumn]="true"
+					cxDropdownColumnTitle="{{ column.header }}" />
+			}
+
+			<cx-table-optional-column
+				[defaultColumnOrder]="initialTableColumnsOrder"
+				[enableAllColumnReorder]="true"
+				[showSelectAll]="false"></cx-table-optional-column>
+
+			<ng-container [cxTableLabel]="'Customize Columns'" [type]="tableLabelTypeEnum.DROPDOWN_MENU_TITLE" />
+			<ng-container cxTableLabel="Select all" [type]="tableLabelTypeEnum.CHECKBOX_SELECT_LABEL" />
+			<ng-container cxTableLabel="Unselect all" [type]="tableLabelTypeEnum.CHECKBOX_UNSELECT_LABEL" />
+			<ng-container cxTableLabel="Reset to default" [type]="tableLabelTypeEnum.DROPDOWN_MENU_RESET_BUTTON_TOOLTIP" />
+		</cx-table-with-pagination>
+
+		<cx-table-loading-indicator loadingIndicatorText="Loading Info ..." />
+
+		<ng-container [cxTableLabel]="'First Page'" [type]="tableLabelTypeEnum.PAGINATOR_FIRST_PAGE_LABEL" />
+		<ng-container [cxTableLabel]="'Next Page'" [type]="tableLabelTypeEnum.PAGINATOR_NEXT_PAGE_LABEL" />
+		<ng-container [cxTableLabel]="'Previous Page'" [type]="tableLabelTypeEnum.PAGINATOR_PREVIOUS_PAGE_LABEL" />
+		<ng-container [cxTableLabel]="'Rows per page:'" [type]="tableLabelTypeEnum.PAGINATOR_ITEMS_PER_PAGE_LABEL" />
+		<ng-container
+			[cxTableLabel]="'{start} - {end} of {totalRecords}'"
+			[type]="tableLabelTypeEnum.PAGINATOR_ITEMS_OUT_OF_ALL_LABEL" />
+	</cx-table-container>
+
+	@if (!loading && entries.length === 0) {
+		<div style="text-align: center">
+			You can create a new {{ resourceType }} by clicking on "New {{ resourceType }}"
+		</div>
+	}
+</div>

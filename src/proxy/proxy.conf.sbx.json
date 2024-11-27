@@ -1,0 +1,11 @@
+{
+	"/api": {
+		"target": "https://apim-pdms-ingress-v1-sbx.azure-api.net/v1/pdms/api/",
+		"secure": true,
+		"logLevel": "debug",
+		"pathRewrite": {
+			"^/api": ""
+		},
+		"changeOrigin": true
+	}
+}

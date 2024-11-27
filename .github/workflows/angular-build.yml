@@ -1,0 +1,70 @@
+# Workflow to build and package an Angular application. The resulting "dist" artifact is uploaded as a build artifact and then consumed
+# by the "gen-image-build.yml" workflow to package it into a Docker image.
+#
+# Trigger: push to a feature, develop, release or main branch
+name: Build Angular
+
+on:
+  workflow_call:
+    inputs:
+      dist_path:
+        description: "Path to the dist folder"
+        type: string
+        required: true
+    secrets:
+      artifactory_group_repo:
+        description: "URL of the Artifactory group repository to be used for the build"
+        required: true
+      artifactory_token:
+        description: "Artifactory token"
+        required: true
+
+jobs:
+  build:
+    name: Build & Package
+    runs-on: generic
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Set npm registry
+        run: |
+          npm config set registry ${{ secrets.artifactory_group_repo }}
+          npm set //$(echo "${{ secrets.artifactory_group_repo }}" | sed 's~https*://~~g'):_authToken "${{ secrets.artifactory_token }}"
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - name: Cache
+        uses: actions/cache@v3
+        id: npm-cache # Use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          cd tools/pdms-ui
+          mkdir node_modules && npm ci --ignore-scripts
+
+      - name: Build application
+        run: |
+          cd tools/pdms-ui
+          npm run build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ${{ inputs.dist_path }} 
+          retention-days: 1

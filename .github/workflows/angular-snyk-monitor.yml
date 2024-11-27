@@ -1,0 +1,57 @@
+# This workflow runs "Snyk Monitor" on an Angular project to monitor its dependencies for known vulnerablilities or vulnerabilities detected
+# in the future. The workflow is intended to run on a push to a "release" branch and needs a target reference to name it on Snyk. This is
+# usally the major/minor/patch version of the release.
+#
+# Trigger: push to develop, main or a release branch
+name: Snyk Monitor Angular
+
+on:
+  workflow_call:
+    inputs:
+      build_type:
+        description: "Type of the build run: `stable`, `release` or `pre-release`"
+        type: string
+        required: false
+        default: "release"
+      mmp_semver:
+        description: "Major/Minor/Patch semantic version"
+        type: string
+        required: true
+    secrets:
+      snyk_token:
+        description: "Snyk token for vulnerability scanning"
+        required: true
+      snyk_org_id:
+        description: "Snyk organization ID"
+        required: true
+
+jobs:
+  monitor: # This job runs the Snyk vulnerability scanner
+    name: Monitor Vulnerabilities Angular
+    runs-on: generic
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+
+      - name: Run Snyk Monitor
+        id: synk_monitor
+        run: |
+          if [[ "${{ inputs.build_type }}" == "release" ]]; then
+            # Use the major/minor/patch version as the target reference if we're on a release branch:
+            target_reference=${{ inputs.mmp_semver }}
+          elif [[ "${{ inputs.build_type }}" == "pre-release" ]]; then
+            target_reference=develop
+          elif [[ "${{ inputs.build_type }}" == "stable" ]]; then
+            target_reference=main
+          else
+            echo "Unsupported build type: ${{ inputs.build_type }}"
+            exit -1
+          fi
+
+          cd tools/pdms-ui/src
+          snyk monitor --org=${{ secrets.snyk_org_id }} --package-manager=npm --severity-threshold=medium --target-reference=$target_reference
+        env:
+          SNYK_TOKEN: ${{ secrets.snyk_token }}

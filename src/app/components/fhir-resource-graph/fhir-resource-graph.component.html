@@ -1,0 +1,26 @@
+<div class="graph-container" (keyup)="onKeyUp($event)">
+	<div class="controls">
+		<button (click)="zoomIn()">Zoom In</button>
+		<button (click)="zoomOut()">Zoom Out</button>
+		<button (click)="fit()">Fit</button>
+		<button
+			(click)="showAllReferences()"
+			[disabled]="selectedResource?.resourceType !== 'Patient'"
+			[title]="
+				selectedResource?.resourceType !== 'Patient'
+					? 'Button is disabled because the selected resource is not a Patient'
+					: ''
+			"
+			>Show All References</button
+		>
+		<button (click)="showDirectReferences()" [disabled]="!this.selectedResource">Show Direct References</button>
+		<button (click)="addIndirectReference()" [disabled]="!this.selectedResource">Add Indirect Reference</button>
+		<button (click)="deleteNodeOrEdge()" [disabled]="!this.selectedResource">Delete Node</button>
+	</div>
+	<div #networkContainer class="network-graph"></div>
+	@if (selectedResource) {
+		<div class="resource-view">
+			<app-fhir-json-viewer [resource]="selectedResource"></app-fhir-json-viewer>
+		</div>
+	}
+</div>

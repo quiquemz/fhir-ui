@@ -1,0 +1,32 @@
+span {
+	margin-right: 4px;
+}
+
+.controls {
+	margin-bottom: 15px;
+}
+
+.json-viewer {
+	font-family: monospace;
+	margin: 0 5px 5px;
+}
+
+.json-key {
+	cursor: pointer;
+	font-weight: bold;
+	margin-right: 4px;
+}
+
+.json-key-index {
+	cursor: pointer;
+	color: #999;
+}
+
+.json-key:hover,
+.json-key-index:hover {
+	text-decoration: underline;
+}
+
+.json-value {
+	padding-left: 20px;
+}

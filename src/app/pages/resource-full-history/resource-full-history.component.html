@@ -1,0 +1,15 @@
+<h2>{{ resourceType }} History</h2>
+<p>
+	With id:
+	<a routerLink="..">{{ resourceId }}</a>
+</p>
+
+<app-fhir-entry-list
+	[columns]="columns"
+	[initialTableColumnsOrder]="initialTableColumnsOrder"
+	[patientIdentifierSearchPrefix]="patientIdentifierSearchPrefix"
+	[resourceType]="resourceType"
+	[searchParams]="searchParams"
+	[resourceId]="resourceId"
+	[goToDetail]="goToDetail"
+	[getAllResources]="getAllResources"></app-fhir-entry-list>

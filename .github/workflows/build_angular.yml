@@ -1,0 +1,94 @@
+name: Build Angular
+
+# Application and Docker image build workflow run on pushes to the following branches:
+on:
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'Environment/stage'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - sbx
+          - dev
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+  checks: write
+
+jobs:
+  setup:
+    name: Setup
+    uses: ./.github/workflows/gen-setup.yml
+
+  # Build the application from code. Pluggable to allow for different build steps based on the application type.
+  build_application:
+    name: App Angular
+    needs: [setup]
+    uses: ./.github/workflows/app_angular.yml
+    with:
+      build_type: ${{ needs.setup.outputs.build_type }}
+      run_tests: true
+      run_static_code_analysis: ${{ needs.setup.outputs.build_type == 'pre-release' }} # on develop branch
+      full_semver: ${{ needs.setup.outputs.full_semver }}
+      mmp_semver: ${{ needs.setup.outputs.mmp_semver }}
+    secrets:
+      artifactory_group_repo: ${{ secrets.ARTIFACTORY_NPM_GROUP_REPO }}
+      artifactory_token: ${{ secrets.ARTIFACTORY_TOKEN }}
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
+      sonar_team_id: ${{ secrets.SONAR_TEAM_ID }}
+
+  # Build the Docker image. Pushes to the container registry if we're on a release or pre-release branch.
+  build_image:
+    name: Docker Angular
+    needs: [setup, build_application]
+    uses: ./.github/workflows/gen-image-build.yml
+    with:
+      build_type: ${{ needs.setup.outputs.build_type }}
+      environment: ${{ needs.setup.outputs.stage }}
+      # image_name: ${{ needs.setup.outputs.image_name }}
+      image_name: fhir-ui
+      full_semver: ${{ needs.setup.outputs.full_semver }}
+      mmp_semver: ${{ needs.setup.outputs.mmp_semver }}
+      base_image_container_registry_name: "pmp${{ needs.setup.outputs.stage }}pfucr999"  
+      container_registry_name: "pmp${{ needs.setup.outputs.stage }}pfucr999"  
+      download_distribution: true
+    secrets:
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+      artifactory_group_repo: ${{ secrets.ARTIFACTORY_NPM_GROUP_REPO }}
+      artifactory_token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+  # Continuous deploy to dev environment if we're on develop branch.
+  deploy:
+    name: Continuous Deploy Angular
+    needs: [setup, build_image]
+    if: ${{ needs.setup.outputs.build_type == 'pre-release' }} # on develop branch
+    uses: ./.github/workflows/gen-app-deploy.yml
+    with:
+      environment: ${{ needs.setup.outputs.stage }}
+      image: fhir-ui
+      container_app_name: fhir-ui-v1-${{ needs.setup.outputs.stage }}
+      container_app_environment: cae-pdms-container-runtime-v1-${{ needs.setup.outputs.stage }}
+      resource_group: rg-pdms-container-runtime-v1
+    secrets:
+      tenant_id: ${{ secrets.TENANT_ID }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+
+  # Prepare the release  if we're on a release branch by creating a PR targeting main.
+  prepare_release:
+    name: Prepare Release Angular
+    needs: [setup, build_image]
+    uses: ./.github/workflows/gen-prepare-release.yml
+    with:
+      build_type: ${{ needs.setup.outputs.build_type }}
+      release_version: ${{ needs.setup.outputs.mmp_semver }}
+      is_hotfix: ${{ needs.setup.outputs.is_hotfix == 'true' }}
+    secrets:
+      pull_request_creator_app_id: ${{ secrets.PULL_REQUEST_CREATOR_APP_ID }}
+      pull_request_creator_app_private_key: ${{ secrets.PULL_REQUEST_CREATOR_APP_PRIVATE_KEY }}

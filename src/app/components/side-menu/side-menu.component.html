@@ -1,0 +1,11 @@
+<cx-navigation-drawer>
+    <cx-navigation-drawer-button name="Home"
+                                 icon="home"
+                                 routerLink="/home" />
+
+    @for (resource of resources; track resource) {
+    <cx-navigation-drawer-button name="{{resource.resourceType}}"
+                                 icon="{{resource.icon}}"
+                                 routerLink="{{resource.resourceType}}" />
+    }
+</cx-navigation-drawer>

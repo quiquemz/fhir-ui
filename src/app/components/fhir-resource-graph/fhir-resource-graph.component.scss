@@ -1,0 +1,36 @@
+.graph-container {
+	display: flex;
+	text-align: center;
+	height: calc(100vh - 250px);
+}
+
+.network-graph {
+	width: 100%;
+	border: 1px solid lightgray;
+	margin-top: 10px;
+}
+
+.controls {
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.controls button {
+	margin: 5px;
+	padding: 5px 10px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.controls button:focus {
+	outline: none;
+}
+
+.resource-view {
+	margin-top: 10px;
+	text-align: left;
+	overflow-y: overlay;
+	width: 33%;
+}

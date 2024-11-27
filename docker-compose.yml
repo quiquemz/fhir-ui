@@ -1,0 +1,18 @@
+services:
+  fhir-ui:
+    image: ${REPOSITORY:-local}/fhir-ui:${TAG:-latest}
+    build:
+      context: .
+      secrets:
+        - npm_user_config
+
+    ports:
+      - '4200:8080'
+    environment:
+      AuthValidation__ClientId__User: '${AuthValidation__ClientId__User}'
+      AuthValidation__Instance__User: '${AuthValidation__Instance__User}'
+      AuthValidation__TenantId: '${AuthValidation__TenantId}'
+
+secrets:
+  npm_user_config:
+    file: tools/pdms-ui/.npmrc

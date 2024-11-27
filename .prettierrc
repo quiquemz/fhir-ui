@@ -1,0 +1,17 @@
+{
+	"singleQuote": true,
+	"printWidth": 120,
+	"tabWidth": 2,
+	"trailingComma": "all",
+	"semi": true,
+	"htmlWhitespaceSensitivity": "strict",
+	"overrides": [
+		{
+			"files": "*.html",
+			"options": {
+				"parser": "angular",
+				"bracketSameLine": true
+			}
+		}
+	]
+}

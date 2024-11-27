@@ -1,0 +1,74 @@
+name: Build Angular App
+
+# Builds the application from code and executes unit tests, static code analysis, and vulnerability scanning on demand. This workflow
+# builds a Java application using Maven, but can be adapted to build other types of applications as well. 
+
+on:
+  workflow_call:
+    inputs:
+      sonar_host_url:
+        description: "URL of the SonarQube server"
+        type: string
+        default: "https://sonar.quiquemz.io"
+      run_tests:
+        description: "Whether to run the tests"
+        type: boolean
+        default: true
+      run_static_code_analysis:
+        description: "Whether to run the SonarQube static code analysis"
+        type: boolean
+        default: false
+      run_lint:
+        description: "Whether to run the linting"
+        type: boolean
+        default: false
+      full_semver:
+        description: "Full semantic version"
+        type: string
+        required: true
+      mmp_semver:
+        description: "Major/Minor/Patch semantic version"
+        type: string
+        required: true
+      build_type:
+        description: "Type of the build run: `release`, `pre-release` or `feature`"
+        type: string
+        required: true
+    secrets:
+      artifactory_group_repo:
+        description: "URL of the Artifactory group repository to be used for the build"
+        required: true
+      artifactory_token:
+        description: "Artifactory token"
+        required: true
+      sonar_token:
+        description: "Token for the SonarQube analysis"
+        required: false
+      sonar_team_id:
+        description: "SonarQube team Id. Used in combination with the `workload_id` to create the SonarQube project key: `<sonar_team_id>:<workload_id>`."
+        required: false
+
+jobs:
+  build:
+    name: Build Angular
+    uses: ./.github/workflows/angular-build.yml
+    with:
+      dist_path: "tools/pdms-ui/dist/fhir-ui"
+    secrets:
+      artifactory_group_repo: ${{ secrets.artifactory_group_repo }}
+      artifactory_token: ${{ secrets.artifactory_token }}
+  
+  # tests: # This job runs the unit tests
+  #   name: Tests Angular
+  #   if: | # SonarQube job below includes the tests, so skip them here is static code analysis is enabled
+  #     inputs.run_tests
+  #   uses: ./.github/workflows/angular-test.yml
+  #   with:
+  #     sonar_host_url: ${{ inputs.sonar_host_url }}
+  #     mmp_semver: ${{ inputs.mmp_semver }}
+  #     run_static_code_analysis: ${{ inputs.run_static_code_analysis }}
+  #     run_lint: ${{ inputs.run_lint }}
+  #   secrets:
+  #     artifactory_group_repo: ${{ secrets.artifactory_group_repo }}
+  #     artifactory_token: ${{ secrets.artifactory_token }}
+  #     sonar_token: ${{ secrets.sonar_token }} 

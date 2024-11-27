@@ -1,0 +1,279 @@
+# Workflow to test an Angular application. Runs the unit tests and optionally creates the SonarQube report.
+#
+# Trigger: push to a feature, develop, release or main branch
+# Trigger: PR from a feature branch to develop branch
+name: Test Angular
+
+on:
+  workflow_call:
+    inputs:
+      run_static_code_analysis:
+        description: "Whether to run the SonarQube static code analysis"
+        type: boolean
+        default: false
+      sonar_host_url:
+        description: "URL of the SonarQube server"
+        type: string
+        default: "https://sonar.quiquemz.io"
+      mmp_semver:
+        description: "Major/Minor/Patch semantic version"
+        type: string
+        required: true
+      run_lint:
+        description: "Whether to run the linting"
+        type: boolean
+        default: false
+    secrets:
+      artifactory_group_repo:
+        description: "URL of the Artifactory group repository to be used for the build"
+        required: true
+      artifactory_token:
+        description: "Artifactory token"
+        required: true
+      sonar_token:
+        description: "Token for the SonarQube analysis"
+        required: false
+
+jobs:
+  unit_tests: # This job runs the unit tests
+    name: Unit Tests Angular
+    runs-on: generic-xxl
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Set npm registry
+        run: |
+          npm config set registry ${{ secrets.artifactory_group_repo }}
+          npm set //$(echo "${{ secrets.artifactory_group_repo }}" | sed 's~https*://~~g'):_authToken "${{ secrets.artifactory_token }}"
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - name: Cache
+        uses: actions/cache@v3
+        id: npm-cache # Use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies Angular
+        run: |
+          cd tools/pdms-ui
+          mkdir node_modules && npm ci --ignore-scripts
+
+      - name: Test application
+        run: |
+          cd tools/pdms-ui
+          npm run test:coverage:ci
+
+      - name: Upload test coverage Angular
+        uses: actions/upload-artifact@v3
+        if: inputs.run_static_code_analysis
+        with:
+          name: test-coverage
+          path: tools/pdms-ui/coverage/**/lcov.info
+            
+      - name: Merge test execution reports Angular
+        if: inputs.run_static_code_analysis
+        run: |
+          # Create a new file and add the opening tag
+          echo '<testExecutions version="1">' > merged-sonar-report.xml.tmp
+          
+          # Find all sonar-report.xml files and append their content, excluding the opening and closing tags
+          find tools/pdms-ui/coverage/packages -name 'sonar-report.xml' | while read -r file; do
+            # Fix the path to the test files
+            app_dir=$(echo "$file" | awk -F'/' '{print $4}')
+            sed -i "s|<file path=\"|<file path=\"tools/pdms-ui/packages/$app_dir/|" "$file"
+  
+            # Append the content of the file to the merged report
+            grep -v '<?xml' "$file" | grep -v '<testExecutions' >> merged-sonar-report.xml.tmp
+          done
+  
+          # Remove closing tags
+          grep -v '</testExecutions>' merged-sonar-report.xml.tmp > merged-sonar-report.xml
+          rm merged-sonar-report.xml.tmp
+  
+          # Add the final closing tag
+          echo '</testExecutions>' >> merged-sonar-report.xml
+
+      - name: Upload test execution report Angular
+        uses: actions/upload-artifact@v3
+        if: inputs.run_static_code_analysis
+        with:
+          name: test-execution-report
+          path: merged-sonar-report.xml
+          
+      - name: Test Report Angular
+        uses: dorny/test-reporter@31a54ee7ebcacc03a09ea97a7e5465a47b84aea5
+        if: (success() || failure()) && github.actor != 'dependabot[bot]'
+        with:
+          name: Unit Tests               
+          path: tools/pdms-ui/junit.xml 
+          reporter: java-junit
+
+  sonarqube: # This job runs the SonarQube static code analysis (usually on pull requests targeting the develop branch and on push to the develop branch for the baseline)
+    name: SonarQube Analysis Angular
+    runs-on: task
+    needs: [ unit_tests ]
+    if: (success() || failure()) && inputs.run_static_code_analysis # Run this step even if previous job has failed
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download test coverage
+        uses: actions/download-artifact@v3
+        with:
+          name: test-coverage
+          path: tools/pdms-ui/coverage
+
+      - name: Download test execution report
+        uses: actions/download-artifact@v3
+        with:
+          name: test-execution-report
+
+      - name: SonarQube Code Analysis
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.sonar_token }}
+          SONAR_HOST_URL: ${{ inputs.sonar_host_url }}
+        with:
+          args: >
+            -Dsonar.projectVersion=${{ inputs.mmp_semver }}
+
+  typecheck:
+    name: Typecheck Angular
+    runs-on: generic
+    if: inputs.run_lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+  
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+  
+      - name: Set npm registry
+        run: |
+          npm config set registry ${{ secrets.artifactory_group_repo }}
+          npm set //$(echo "${{ secrets.artifactory_group_repo }}" | sed 's~https*://~~g'):_authToken "${{ secrets.artifactory_token }}"
+  
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+  
+      - name: Cache
+        uses: actions/cache@v3
+        id: npm-cache # Use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+  
+      - name: Install dependencies
+        run: |
+          cd tools/pdms-ui
+          mkdir node_modules && npm ci --ignore-scripts
+  
+      - name: Lint dependencies
+        run: |
+          cd tools/pdms-ui
+          npm run typecheck
+
+  lint_dependencies:
+    name: Lint Dependencies Angular
+    if: inputs.run_lint
+    runs-on: generic
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Set npm registry
+        run: |
+          npm config set registry ${{ secrets.artifactory_group_repo }}
+          npm set //$(echo "${{ secrets.artifactory_group_repo }}" | sed 's~https*://~~g'):_authToken "${{ secrets.artifactory_token }}"
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - name: Cache
+        uses: actions/cache@v3
+        id: npm-cache # Use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          cd tools/pdms-ui
+          mkdir node_modules && npm ci --ignore-scripts
+
+      - name: Lint dependencies
+        run: |
+          cd tools/pdms-ui
+          npm run lint:dependencies
+
+  lint:
+    name: Lint Code Angular
+    if: inputs.run_lint
+    runs-on: generic-xxl
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Set npm registry
+        run: |
+          npm config set registry ${{ secrets.artifactory_group_repo }}
+          npm set //$(echo "${{ secrets.artifactory_group_repo }}" | sed 's~https*://~~g'):_authToken "${{ secrets.artifactory_token }}"
+
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - name: Cache
+        uses: actions/cache@v3
+        id: npm-cache # Use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          cd tools/pdms-ui
+          mkdir node_modules && npm ci --ignore-scripts
+
+      - name: Lint
+        run: |
+          cd tools/pdms-ui
+          npm run lint:ci
