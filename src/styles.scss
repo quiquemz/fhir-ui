@@ -17,24 +17,24 @@ body {
 }
 
 // ---------- Smooth theme transitions ----------
-html {
-  &,
-  & * {
-    transition:
-      background-color var(--transition-speed) ease,
-      color var(--transition-speed) ease,
-      border-color var(--transition-speed) ease,
-      box-shadow var(--transition-speed) ease;
-  }
-
-  // Disable transitions on Material overlays / ripples to prevent jank
-  .cdk-overlay-container,
-  .cdk-overlay-container *,
-  .cdk-overlay-connected-position-bounding-box,
-  .cdk-overlay-pane,
-  .cdk-global-overlay-wrapper {
-    transition: none !important;
-  }
+// Only apply to specific elements that need theme transitions.
+// Avoid html * {} — it breaks CDK overlay positioning.
+html,
+body,
+.mat-sidenav,
+.mat-sidenav-content,
+.mat-mdc-card,
+.mat-mdc-table,
+.mat-mdc-header-cell,
+.mat-mdc-cell,
+.mat-mdc-row,
+.mat-mdc-paginator,
+.mat-toolbar,
+a {
+  transition:
+    background-color var(--transition-speed) ease,
+    color var(--transition-speed) ease,
+    border-color var(--transition-speed) ease;
 }
 
 // ---------- Scrollbar ----------
@@ -74,11 +74,6 @@ button {
 }
 
 // ---------- Table styles ----------
-.mat-mdc-row:hover {
-  background-color: var(--table-row-hover);
-  cursor: pointer;
-}
-
 .mat-mdc-header-cell {
   font-weight: 600;
   color: var(--text-secondary);
@@ -110,12 +105,6 @@ a {
   outline: none;
   box-shadow: var(--focus-ring);
   border-radius: var(--radius-sm);
-}
-
-// CDK overlays should not inherit focus-ring styling
-.cdk-overlay-container *:focus-visible {
-  box-shadow: none;
-  border-radius: 0;
 }
 
 // ---------- Material overrides ----------
