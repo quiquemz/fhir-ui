@@ -1,18 +1,7 @@
 {
 	"production": false,
-	"auth": {
-		"clientId": "4c7cb373-e91b-4ac7-9ac4-491fbb7b0d1f",
-		"domain": "https://test.account.quiquemz.com",
-		"ADDTenantId": "dadf93c1-1d2f-487d-a595-5d5428a9ae96",
-		"signinSignoutPolicy": "B2C_1A__SIGNUP_SIGNIN_MFA"
-	},
 	"apiConfig": {
-		"gpr": {
-			"scopes": ["https://test.account.quiquemz.com/auth/gpr/User.Read"],
-			"uri": "https://api.myprofile.test.account.quiquemz.com/api"
-		},
 		"pdms": {
-			"scopes": ["openid https://test.account.quiquemz.com/auth/gpr/User.Read"],
 			"uri": "/api"
 		}
 	}

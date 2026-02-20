@@ -33,7 +33,10 @@ export class PdmsService {
 
 	getEverythingById(resourceType: string, id: string, pageToken: string): Observable<Bundle<DomainResource>> {
 		const url = `${this.baseUrl}/${resourceType}/${id}/$everything`;
-		var params = new HttpParams().set('ct', pageToken);
+		let params = new HttpParams();
+		if (pageToken) {
+			params = params.set('ct', pageToken);
+		}
 
 		return this.http.get<Bundle<DomainResource>>(url, { params, headers: this.headers });
 	}
@@ -46,7 +49,11 @@ export class PdmsService {
 		searchParams: { [key: string]: string[] } = {},
 	): Observable<Bundle> {
 		const url = `${this.baseUrl}/${resourceType}/${id}/_history`;
-		var params = new HttpParams().set('_total', 'accurate').set('_count', pageSize).set('ct', pageToken);
+		let params = new HttpParams().set('_total', 'accurate').set('_count', pageSize);
+		
+		if (pageToken) {
+			params = params.set('ct', pageToken);
+		}
 
 		for (const [key, value] of Object.entries(searchParams)) {
 			if (value.length > 0) {
@@ -64,7 +71,11 @@ export class PdmsService {
 		searchParams: { [key: string]: string[] } = {},
 	): Observable<Bundle<DomainResource>> {
 		const url = `${this.baseUrl}/${resourceType}`;
-		var params = new HttpParams().set('_total', 'accurate').set('_count', pageSize).set('ct', pageToken);
+		let params = new HttpParams().set('_total', 'accurate').set('_count', pageSize);
+		
+		if (pageToken) {
+			params = params.set('ct', pageToken);
+		}
 
 		for (const [key, value] of Object.entries(searchParams)) {
 			if (value.length > 0) {

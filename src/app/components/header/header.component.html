@@ -1,22 +1,9 @@
 <cx-header layoutClass="container-fluid">
-	<cx-header-title>
-		<button mat-icon-button color="accent" (click)="goHome()">
-			<mat-icon>home</mat-icon>
-		</button>
-		PDMS Developer Portal
-	</cx-header-title>
-	<cx-header-quickbar>
-		@if (!loading) {
-			@if (!!userProfile) {
-				<cx-profile-dropdown
-					[firstname]="userProfile.firstName"
-					[lastname]="userProfile.lastName"
-					[email]="userProfile.email"
-					(logout)="logout()">
-				</cx-profile-dropdown>
-			} @else {
-				<button mat-flat-button color="accent" (click)="login()">Login</button>
-			}
-		}
-	</cx-header-quickbar>
+  <cx-header-title>
+    <button mat-icon-button color="accent" (click)="goHome()">
+      <mat-icon>home</mat-icon>
+    </button>
+    PDMS Developer Portal
+  </cx-header-title>
+  <cx-header-quickbar> </cx-header-quickbar>
 </cx-header>
