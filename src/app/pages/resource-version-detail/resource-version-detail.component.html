@@ -1,5 +1,10 @@
-<h2 style="margin: 12px 0">{{ resourceType }} (v{{ version }})</h2>
+<div class="detail-header">
+  <div class="detail-header-left">
+    <h2 class="detail-title">{{ resourceType }}</h2>
+    <span class="detail-version">Version {{ version }}</span>
+  </div>
+</div>
 
-<div style="margin-top: 20px">
-	<app-fhir-json-viewer [resource]="resource"></app-fhir-json-viewer>
+<div class="detail-content">
+  <app-fhir-json-viewer [resource]="resource"></app-fhir-json-viewer>
 </div>

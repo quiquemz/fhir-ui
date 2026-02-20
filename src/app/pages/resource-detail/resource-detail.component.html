@@ -1,22 +1,32 @@
-<div style="display: flex; align-items: center; justify-content: space-between">
-  <h2 style="margin: 12px 12px">{{ resourceType }}</h2>
-  <a routerLink="_history">View History</a>
+<div class="detail-header">
+  <div class="detail-header-left">
+    <h2 class="detail-title">{{ resourceType }}</h2>
+    <span class="detail-id">{{ resourceId }}</span>
+  </div>
+  <a routerLink="_history" class="history-link">
+    <mat-icon>history</mat-icon>
+    View History
+  </a>
 </div>
 
 @if (resource) {
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
+  <mat-tab-group
+    mat-stretch-tabs="false"
+    mat-align-tabs="start"
+    (selectedTabChange)="onTabChange($event)"
+    class="detail-tabs">
     <mat-tab label="Detail">
-      <div style="width: 100%; text-align: right">
-        <button mat-flat-button (click)="goToEditPage()" class="button-with-icon" color="accent">
+      <div class="detail-actions">
+        <button mat-stroked-button (click)="goToEditPage()" class="button-with-icon">
           <mat-icon>edit</mat-icon>
-          Edit {{ resourceType }}
+          Edit
         </button>
-        <button mat-flat-button (click)="deleteResource()" class="button-with-icon" color="accent">
+        <button mat-stroked-button (click)="deleteResource()" class="button-with-icon action-delete">
           <mat-icon>delete</mat-icon>
-          Delete {{ resourceType }}
+          Delete
         </button>
       </div>
-      <div style="margin-top: 20px">
+      <div class="detail-content">
         <app-fhir-json-viewer [resource]="resource"></app-fhir-json-viewer>
       </div>
     </mat-tab>

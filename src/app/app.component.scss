@@ -1,8 +1,15 @@
 .app-sidenav-container {
-  height: calc(100vh - 64px);
+  height: calc(100vh - 56px);
+  background-color: var(--bg-app);
 }
 
 mat-sidenav {
   width: 240px;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
+}
+
+.content-area {
+  padding: 24px;
+  min-height: 100%;
 }

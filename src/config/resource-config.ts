@@ -175,6 +175,7 @@ export const resources = [
 		.addColumn('Status', ({ resource }: BundleEntry<ServiceRequest>) => resource?.status)
 		.addColumn('Intent', ({ resource }: BundleEntry<ServiceRequest>) => resource?.intent)
 		.addColumn('Priority', ({ resource }: BundleEntry<ServiceRequest>) => resource?.priority)
+		.withIcon('description')
 		.addLastUpdatedColumn(),
 
 	new ResourceConfig('QuestionnaireResponse')
@@ -182,6 +183,7 @@ export const resources = [
 		.addColumn('Status', ({ resource }: BundleEntry<QuestionnaireResponse>) => resource?.status)
 		.addColumn('Questionnaire', ({ resource }: BundleEntry<QuestionnaireResponse>) => resource?.questionnaire)
 		.addColumn('Subject', ({ resource }: BundleEntry<QuestionnaireResponse>) => resource?.subject?.reference)
+		.withIcon('description')
 		.addLastUpdatedColumn(),
 
 	new ResourceConfig('Provenance')

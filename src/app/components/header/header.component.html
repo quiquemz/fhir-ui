@@ -1,8 +1,16 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="app-header">
   <button mat-icon-button (click)="toggleSidenav.emit()" aria-label="Toggle menu">
     <mat-icon>menu</mat-icon>
   </button>
-  <img src="assets/logo.svg" alt="Logo" height="32" style="margin: 0 12px" />
-  <span>Developer Portal</span>
-  <span style="flex: 1 1 auto"></span>
+  <span class="header-logo-badge">PDMS</span>
+  <span class="header-title">Developer Portal</span>
+  <span class="spacer"></span>
+  <button
+    mat-icon-button
+    (click)="themeService.toggle()"
+    [matTooltip]="themeService.isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+    aria-label="Toggle theme"
+    class="theme-toggle">
+    <mat-icon>{{ themeService.isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
 </mat-toolbar>

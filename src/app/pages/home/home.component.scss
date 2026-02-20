@@ -1,0 +1,193 @@
+.home-container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+// ---------- Hero ----------
+.hero {
+  margin-bottom: 32px;
+}
+
+.hero-content {
+  padding: 32px 0 16px;
+}
+
+.hero-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+// ---------- Section Titles ----------
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+// ---------- Resource Grid ----------
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.resource-card-link {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+.resource-card {
+  cursor: pointer;
+  border: 1px solid var(--card-border);
+  background-color: var(--card-bg);
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--card-shadow) !important;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    box-shadow: var(--card-shadow-hover) !important;
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+  }
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px !important;
+  }
+}
+
+.card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-hover);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--accent-primary);
+  }
+}
+
+.card-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.card-arrow {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+
+  .resource-card:hover & {
+    opacity: 1;
+    color: var(--accent-primary);
+  }
+}
+
+// ---------- Documentation Card ----------
+.docs-section {
+  margin-bottom: 32px;
+}
+
+.docs-card {
+  border: 1px solid var(--card-border);
+  background-color: var(--card-bg);
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px !important;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+}
+
+.docs-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-hover);
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: var(--accent-primary);
+  }
+}
+
+.docs-text {
+  flex: 1;
+
+  h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+}
+
+.docs-button {
+  background-color: var(--accent-primary) !important;
+  color: var(--text-inverse) !important;
+  font-weight: 500;
+  border-radius: var(--radius-sm) !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background-color: var(--accent-primary-hover) !important;
+  }
+}

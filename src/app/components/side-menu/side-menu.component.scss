@@ -1,4 +1,38 @@
+:host {
+  display: block;
+  padding: 8px 0;
+}
+
+mat-nav-list {
+  padding-top: 4px;
+
+  a {
+    margin: 2px 8px;
+    border-radius: var(--radius-sm);
+    color: var(--sidebar-text);
+    letter-spacing: -0.01em;
+    font-size: 14px;
+
+    mat-icon {
+      color: var(--sidebar-icon);
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background-color: var(--sidebar-hover-bg);
+    }
+  }
+}
+
 .active-link {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--sidebar-active-bg) !important;
   font-weight: 600;
+  color: var(--sidebar-active-text) !important;
+  border-left: 3px solid var(--accent-primary);
+
+  mat-icon {
+    color: var(--sidebar-active-icon) !important;
+  }
 }

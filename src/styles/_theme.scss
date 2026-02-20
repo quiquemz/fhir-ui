@@ -1,0 +1,91 @@
+// ============================================================================
+// Custom Angular Material Theme — Light & Dark
+// Angular Material 18 (M3 API)
+// ============================================================================
+@use '@angular/material' as mat;
+
+// ---------- Light Theme ----------
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$violet-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    typography: (
+      plain-family: (
+        'Inter',
+        sans-serif,
+      ),
+      brand-family: (
+        'Inter',
+        sans-serif,
+      ),
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+// ---------- Dark Theme ----------
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$violet-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    typography: (
+      plain-family: (
+        'Inter',
+        sans-serif,
+      ),
+      brand-family: (
+        'Inter',
+        sans-serif,
+      ),
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+// Apply light theme by default
+:root,
+html {
+  @include mat.all-component-themes($light-theme);
+}
+
+// Apply dark theme when data-theme="dark" is set
+[data-theme='dark'] {
+  @include mat.all-component-colors($dark-theme);
+
+  // Override Material component surfaces for dark mode
+  .mat-mdc-card {
+    background-color: var(--card-bg);
+  }
+
+  .mat-mdc-dialog-container {
+    --mdc-dialog-container-color: var(--bg-surface);
+  }
+
+  .mat-mdc-table {
+    background-color: var(--bg-surface);
+  }
+
+  .mat-mdc-paginator {
+    background-color: var(--bg-surface);
+  }
+
+  .mat-mdc-form-field {
+    --mdc-filled-text-field-container-color: var(--bg-elevated);
+  }
+
+  .mat-mdc-select-panel,
+  .mat-mdc-autocomplete-panel,
+  .mat-mdc-menu-panel {
+    background-color: var(--bg-elevated);
+  }
+}
