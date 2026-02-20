@@ -1,11 +1,13 @@
-<cx-navigation-drawer>
-    <cx-navigation-drawer-button name="Home"
-                                 icon="home"
-                                 routerLink="/home" />
+<mat-nav-list>
+  <a mat-list-item routerLink="/home" routerLinkActive="active-link">
+    <mat-icon matListItemIcon>home</mat-icon>
+    <span matListItemTitle>Home</span>
+  </a>
 
-    @for (resource of resources; track resource) {
-    <cx-navigation-drawer-button name="{{resource.resourceType}}"
-                                 icon="{{resource.icon}}"
-                                 routerLink="{{resource.resourceType}}" />
-    }
-</cx-navigation-drawer>
+  @for (resource of resources; track resource) {
+    <a mat-list-item routerLink="{{ resource.resourceType }}" routerLinkActive="active-link">
+      <mat-icon matListItemIcon>{{ resource.icon }}</mat-icon>
+      <span matListItemTitle>{{ resource.resourceType }}</span>
+    </a>
+  }
+</mat-nav-list>

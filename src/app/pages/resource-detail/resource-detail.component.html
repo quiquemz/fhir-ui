@@ -1,27 +1,27 @@
 <div style="display: flex; align-items: center; justify-content: space-between">
-	<h2 style="margin: 12px 12px">{{ resourceType }}</h2>
-	<a routerLink="_history">View History</a>
+  <h2 style="margin: 12px 12px">{{ resourceType }}</h2>
+  <a routerLink="_history">View History</a>
 </div>
 
 @if (resource) {
-	<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
-		<mat-tab label="Detail">
-			<div style="width: 100%; text-align: right">
-				<button mat-flat-button (click)="goToEditPage()" class="cx-button-with-icon" color="accent">
-					<mat-icon class="cx-icon-in-button">edit</mat-icon>
-					Edit {{ resourceType }}
-				</button>
-				<button mat-flat-button (click)="deleteResource()" class="cx-button-with-icon" color="accent">
-					<mat-icon class="cx-icon-in-button">delete</mat-icon>
-					Delete {{ resourceType }}
-				</button>
-			</div>
-			<div style="margin-top: 20px">
-				<app-fhir-json-viewer [resource]="resource"></app-fhir-json-viewer>
-			</div>
-		</mat-tab>
-		<mat-tab label="Graph">
-			<app-fhir-resource-graph #graphComponent [resource]="resource"></app-fhir-resource-graph>
-		</mat-tab>
-	</mat-tab-group>
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
+    <mat-tab label="Detail">
+      <div style="width: 100%; text-align: right">
+        <button mat-flat-button (click)="goToEditPage()" class="button-with-icon" color="accent">
+          <mat-icon>edit</mat-icon>
+          Edit {{ resourceType }}
+        </button>
+        <button mat-flat-button (click)="deleteResource()" class="button-with-icon" color="accent">
+          <mat-icon>delete</mat-icon>
+          Delete {{ resourceType }}
+        </button>
+      </div>
+      <div style="margin-top: 20px">
+        <app-fhir-json-viewer [resource]="resource"></app-fhir-json-viewer>
+      </div>
+    </mat-tab>
+    <mat-tab label="Graph">
+      <app-fhir-resource-graph #graphComponent [resource]="resource"></app-fhir-resource-graph>
+    </mat-tab>
+  </mat-tab-group>
 }

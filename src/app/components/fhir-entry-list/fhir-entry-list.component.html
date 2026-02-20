@@ -1,71 +1,104 @@
 <div class="resource-list-container">
-	<cx-table-container [tableLoading]="loading">
-		<cx-table-toolbar>
-			@if (patientIdentifierSearchPrefix) {
-				<cx-search-bar
-					placeholder="Search by Patient Identifier"
-					[debouncedTime]="2000"
-					(search)="searchByPatientIdentifier($event)" />
-			}
-		</cx-table-toolbar>
+  <!-- Search Bar -->
+  @if (patientIdentifierSearchPrefix) {
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search by Patient Identifier</mat-label>
+      <input
+        matInput
+        [value]="searchValue"
+        (input)="onSearchInput($event)"
+        placeholder="Search by Patient Identifier" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  }
 
-		<cx-table-with-pagination
-			[data]="entries"
-			[initialTableColumnsOrder]="initialTableColumnsOrder"
-			[paginatorPageIndex]="pageIndex"
-			[paginatorTotalRecordsCount]="totalRecords"
-			(paginatorChange)="updatePagination($event)"
-			(rowClicked)="internalGoToDetail($event)"
-			matSort
-			[sorting]="sorting"
-			(sortChange)="sort($event)"
-			[showTableRowHover]="true">
-			@for (column of columns; track column) {
-				<ng-container matColumnDef="{{ column.columnDef }}">
-					<mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.sortBy">
-						<span class="cx-title-text">{{ column.header }}</span>
-						@if (column.filters.length > 0) {
-							<cx-table-filter
-								columnDef="{{ column.columnDef }}"
-								filterHeaderText="{{ column.header }}"
-								[filterOptions]="column.filters"
-								(filterSelectionChange)="updateFilters($event, $index)"></cx-table-filter>
-						}
-					</mat-header-cell>
-					<mat-cell *matCellDef="let resource">{{  column.cell(resource) }}</mat-cell>
-				</ng-container>
+  <!-- Loading Indicator -->
+  @if (loading) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
 
-				<ng-container
-					cxDropdownColumn="{{ column.columnDef }}"
-					[cxOptionalColumn]="true"
-					cxDropdownColumnTitle="{{ column.header }}" />
-			}
+  <!-- Column Visibility Toggle -->
+  <div class="table-toolbar">
+    <button mat-stroked-button [matMenuTriggerFor]="columnMenu">
+      <mat-icon>view_column</mat-icon>
+      Customize Columns
+    </button>
+    <mat-menu #columnMenu="matMenu">
+      @for (column of columns; track column) {
+        <button mat-menu-item (click)="toggleColumn(column.columnDef); $event.stopPropagation()">
+          <mat-icon>{{ isColumnVisible(column.columnDef) ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+          {{ column.header }}
+        </button>
+      }
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="resetColumns()">
+        <mat-icon>restart_alt</mat-icon>
+        Reset to default
+      </button>
+    </mat-menu>
+  </div>
 
-			<cx-table-optional-column
-				[defaultColumnOrder]="initialTableColumnsOrder"
-				[enableAllColumnReorder]="true"
-				[showSelectAll]="false"></cx-table-optional-column>
+  <!-- Data Table -->
+  <div class="table-container mat-elevation-z2">
+    <table
+      mat-table
+      [dataSource]="entries"
+      matSort
+      [matSortActive]="sorting.id"
+      [matSortDirection]="sorting.start"
+      (matSortChange)="sort($event)">
+      @for (column of columns; track column) {
+        <ng-container matColumnDef="{{ column.columnDef }}">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!column.sortBy">
+            <span>{{ column.header }}</span>
+            @if (column.filters.length > 0) {
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="filterMenu"
+                (click)="$event.stopPropagation()"
+                class="filter-button">
+                <mat-icon [class.filter-active]="hasActiveFilter(column.filterName)">filter_list</mat-icon>
+              </button>
+              <mat-menu #filterMenu="matMenu">
+                <div class="filter-menu-header" mat-menu-item disabled>
+                  {{ column.header }}
+                </div>
+                <mat-divider></mat-divider>
+                @for (filter of column.filters; track filter) {
+                  <button mat-menu-item (click)="toggleFilter(column.filterName, filter); $event.stopPropagation()">
+                    <mat-icon>{{
+                      isFilterSelected(column.filterName, filter) ? 'check_box' : 'check_box_outline_blank'
+                    }}</mat-icon>
+                    {{ filter }}
+                  </button>
+                }
+              </mat-menu>
+            }
+          </th>
+          <td mat-cell *matCellDef="let resource">{{ column.cell(resource) }}</td>
+        </ng-container>
+      }
 
-			<ng-container [cxTableLabel]="'Customize Columns'" [type]="tableLabelTypeEnum.DROPDOWN_MENU_TITLE" />
-			<ng-container cxTableLabel="Select all" [type]="tableLabelTypeEnum.CHECKBOX_SELECT_LABEL" />
-			<ng-container cxTableLabel="Unselect all" [type]="tableLabelTypeEnum.CHECKBOX_UNSELECT_LABEL" />
-			<ng-container cxTableLabel="Reset to default" [type]="tableLabelTypeEnum.DROPDOWN_MENU_RESET_BUTTON_TOOLTIP" />
-		</cx-table-with-pagination>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns; let i = index"
+        (click)="internalGoToDetail(i)"
+        class="clickable-row"></tr>
+    </table>
 
-		<cx-table-loading-indicator loadingIndicatorText="Loading Info ..." />
+    <mat-paginator
+      [length]="totalRecords"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (page)="updatePagination($event)">
+    </mat-paginator>
+  </div>
 
-		<ng-container [cxTableLabel]="'First Page'" [type]="tableLabelTypeEnum.PAGINATOR_FIRST_PAGE_LABEL" />
-		<ng-container [cxTableLabel]="'Next Page'" [type]="tableLabelTypeEnum.PAGINATOR_NEXT_PAGE_LABEL" />
-		<ng-container [cxTableLabel]="'Previous Page'" [type]="tableLabelTypeEnum.PAGINATOR_PREVIOUS_PAGE_LABEL" />
-		<ng-container [cxTableLabel]="'Rows per page:'" [type]="tableLabelTypeEnum.PAGINATOR_ITEMS_PER_PAGE_LABEL" />
-		<ng-container
-			[cxTableLabel]="'{start} - {end} of {totalRecords}'"
-			[type]="tableLabelTypeEnum.PAGINATOR_ITEMS_OUT_OF_ALL_LABEL" />
-	</cx-table-container>
-
-	@if (!loading && entries.length === 0) {
-		<div style="text-align: center">
-			You can create a new {{ resourceType }} by clicking on "New {{ resourceType }}"
-		</div>
-	}
+  @if (!loading && entries.length === 0) {
+    <div style="text-align: center; margin-top: 20px">
+      You can create a new {{ resourceType }} by clicking on "New {{ resourceType }}"
+    </div>
+  }
 </div>

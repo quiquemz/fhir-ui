@@ -1,0 +1,8 @@
+.app-sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+mat-sidenav {
+  width: 240px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+}

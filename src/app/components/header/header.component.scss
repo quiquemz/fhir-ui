@@ -1,3 +1,5 @@
-:host ::ng-deep cx-header > div > div{
-	padding: 0 20px;
+:host {
+  mat-toolbar {
+    padding: 0 20px;
+  }
 }

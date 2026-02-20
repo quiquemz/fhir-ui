@@ -23,7 +23,7 @@ module.exports = {
     ],
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(.*\\.mjs$|lodash-es|rxjs|crypto-es|lit-html|@auth|@angular|@ngrx|@ngneat|ngx-|d3-|@quiquemz|@swimlane|internmap))',
+    'node_modules/(?!(.*.mjs$|lodash-es|rxjs|crypto-es|lit-html|@auth|@angular|@ngrx|@ngneat|ngx-|d3-|@swimlane|internmap))',
   ],
 
   // TODO: Set coverage to 80 for all params

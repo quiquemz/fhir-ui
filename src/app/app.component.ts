@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { CxHeaderModule } from '@quiquemz/cortex/header';
-import { CxNavigationDrawerModule } from '@quiquemz/cortex/navigation-drawer';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HeaderComponent } from './components/header/header.component';
 
@@ -14,8 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    CxHeaderModule,
-    CxNavigationDrawerModule,
+    MatSidenavModule,
     SideMenuComponent,
     HeaderComponent,
   ],

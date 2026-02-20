@@ -1,5 +1,12 @@
-<app-header></app-header>
+<app-header (toggleSidenav)="sidenav.toggle()"></app-header>
 
-<div class="ng-container" style="margin: 20px">
-	<router-outlet></router-outlet>
-</div>
+<mat-sidenav-container class="app-sidenav-container">
+  <mat-sidenav #sidenav mode="side" opened>
+    <app-side-menu></app-side-menu>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="margin: 20px">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

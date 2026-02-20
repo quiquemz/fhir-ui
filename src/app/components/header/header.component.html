@@ -1,9 +1,8 @@
-<cx-header layoutClass="container-fluid">
-  <cx-header-title>
-    <button mat-icon-button color="accent" (click)="goHome()">
-      <mat-icon>home</mat-icon>
-    </button>
-    PDMS Developer Portal
-  </cx-header-title>
-  <cx-header-quickbar> </cx-header-quickbar>
-</cx-header>
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="toggleSidenav.emit()" aria-label="Toggle menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <img src="assets/logo.svg" alt="Logo" height="32" style="margin: 0 12px" />
+  <span>Developer Portal</span>
+  <span style="flex: 1 1 auto"></span>
+</mat-toolbar>

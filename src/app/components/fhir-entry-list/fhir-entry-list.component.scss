@@ -1,0 +1,44 @@
+.resource-list-container {
+  width: 100%;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 16px;
+}
+
+.table-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.table-container {
+  overflow: auto;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+}
+
+.clickable-row:hover {
+  cursor: pointer;
+}
+
+.filter-button {
+  margin-left: 4px;
+}
+
+.filter-active {
+  color: #3f51b5;
+}
+
+.filter-menu-header {
+  font-weight: 600;
+}
+
+mat-paginator {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
