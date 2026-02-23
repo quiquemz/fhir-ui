@@ -1,17 +1,4 @@
 <div class="resource-list-container">
-  <!-- Search Bar -->
-  @if (patientIdentifierSearchPrefix) {
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Search by Patient Identifier</mat-label>
-      <input
-        matInput
-        [value]="searchValue"
-        (input)="onSearchInput($event)"
-        placeholder="Search by Patient Identifier" />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-  }
-
   <!-- Loading Indicator -->
   @if (loading) {
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>

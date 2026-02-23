@@ -75,12 +75,6 @@ export class FhirEntryListComponent implements OnInit, OnDestroy {
     this.searchSubscription?.unsubscribe();
   }
 
-  onSearchInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchValue = value;
-    this.searchSubject.next(value);
-  }
-
   loadResources(): void {
     this.loading = true;
 
