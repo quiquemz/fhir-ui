@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { resources } from '../../../config/resource-config';
+import { resources } from '../../../config/resource-configs';
 
 @Component({
 	selector: 'app-home',

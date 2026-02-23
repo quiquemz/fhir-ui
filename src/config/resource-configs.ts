@@ -17,7 +17,7 @@ import {
 	ServiceRequest,
 	Task,
 } from 'fhir/r4';
-import { ResourceConfig } from './ResourceConfig';
+import { ResourceConfig } from './resource-config.model';
 
 export const resources = [
 	new ResourceConfig('Patient')

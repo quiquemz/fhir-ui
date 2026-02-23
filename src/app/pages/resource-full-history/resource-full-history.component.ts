@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ServiceMethod } from '../../models/ServiceMethodTypes';
-import { ColumnConfig } from '../../../config/ColumnConfig';
+import { ColumnConfig } from '../../../config/column-config.model';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PdmsService } from '../../services/pdms.service';
 import { BundleEntry } from 'fhir/r4';
