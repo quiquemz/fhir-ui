@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { resources as resourcesConfig } from '../config/resource-config';
+import { resources as resourcesConfig } from '../config/resource-configs';
 import { FhirResourceEditComponent } from './components/fhir-resource-edit/fhir-resource-edit.component';
 import { AllResourcesComponent } from './pages/all-resources/all-resources.component';
 import { ResourceFullHistoryComponent } from './pages/resource-full-history/resource-full-history.component';

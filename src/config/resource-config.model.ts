@@ -1,5 +1,5 @@
 import { BundleEntry, Resource } from 'fhir/r4';
-import { ColumnConfig } from './ColumnConfig';
+import { ColumnConfig } from './column-config.model';
 
 export class ResourceConfig {
 	resourceType: string;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FhirEntryListComponent } from '../../components/fhir-entry-list/fhir-entry-list.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ColumnConfig } from '../../../config/ColumnConfig';
+import { ColumnConfig } from '../../../config/column-config.model';
 import { MatSortable } from '@angular/material/sort';
 import { PdmsService } from '../../services/pdms.service';
 import { ServiceMethod } from '../../models/ServiceMethodTypes';

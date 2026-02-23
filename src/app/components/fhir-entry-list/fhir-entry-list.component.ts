@@ -13,7 +13,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { BundleEntry } from 'fhir/r4';
 import { catchError, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ColumnConfig } from '../../../config/ColumnConfig';
+import { ColumnConfig } from '../../../config/column-config.model';
 import { ServiceMethod as GetListServiceMethod } from '../../models/ServiceMethodTypes';
 
 @Component({
