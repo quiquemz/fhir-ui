@@ -1,44 +1,47 @@
 .breadcrumb {
-	display: flex;
-	flex-wrap: wrap;
-	padding: 0.75rem 1rem;
-	margin-bottom: 1rem;
-	list-style: none;
-	background-color: #f8f9fa;
-	border-radius: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+  list-style: none;
+  background-color: var(--breadcrumb-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
 }
 
 .breadcrumb-item {
-	font-size: 1rem;
-	color: #007bff;
-	display: flex;
-	align-items: center;
+  font-size: 0.875rem;
+  color: var(--breadcrumb-link);
+  display: flex;
+  align-items: center;
 }
 
 .breadcrumb-item + .breadcrumb-item::before {
-	content: '>';
-	display: inline-block;
-	padding-right: 0.5rem;
-	padding-left: 0.5rem;
-	color: #6c757d;
+  content: '/';
+  display: inline-block;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  color: var(--breadcrumb-separator);
+  font-weight: 300;
 }
 
 .breadcrumb-item a {
-	color: #007bff;
-	text-decoration: none;
+  color: var(--breadcrumb-link);
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .breadcrumb-item a:hover {
-	color: #0056b3;
-	text-decoration: underline;
+  color: var(--breadcrumb-link-hover);
+  text-decoration: underline;
 }
 
 .breadcrumb-item.active {
-	color: #6c757d;
-	pointer-events: none;
+  color: var(--breadcrumb-text);
+  pointer-events: none;
 }
 
 .breadcrumb-item.active span {
-	text-decoration: none;
-	color: inherit;
+  text-decoration: none;
+  color: inherit;
 }

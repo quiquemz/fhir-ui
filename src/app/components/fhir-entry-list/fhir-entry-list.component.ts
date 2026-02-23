@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { BundleEntry } from 'fhir/r4';
 import { catchError, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -29,6 +30,7 @@ import { ServiceMethod as GetListServiceMethod } from '../../models/ServiceMetho
     MatInputModule,
     MatMenuModule,
     MatDividerModule,
+    ScrollingModule,
   ],
   templateUrl: './fhir-entry-list.component.html',
   styleUrl: './fhir-entry-list.component.scss',
@@ -71,12 +73,6 @@ export class FhirEntryListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.searchSubscription?.unsubscribe();
-  }
-
-  onSearchInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchValue = value;
-    this.searchSubject.next(value);
   }
 
   loadResources(): void {

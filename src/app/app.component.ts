@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -11,12 +11,10 @@ import { HeaderComponent } from './components/header/header.component';
   imports: [
     CommonModule,
     RouterOutlet,
-    RouterLink,
-    RouterLinkActive,
     MatSidenavModule,
     SideMenuComponent,
-    HeaderComponent,
-  ],
+    HeaderComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

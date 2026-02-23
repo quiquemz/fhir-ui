@@ -16,3 +16,6 @@ Source of truth for near-term work items. (Mirrors the Copilot TODO tracker used
   - Notes: Decide provider (OIDC/MSAL?) and required routes/guards.
 - [ ] 6. Add support for advanced search in resource list
   - Notes: Define query syntax and UI for building complex filters.
+- [ ] 7. Add missing resources
+- [ ] 8. Categorize resources according to FHIR spec (e.g., Clinical, Administrative)
+  - Notes: Define categories and update resource list UI to reflect them.

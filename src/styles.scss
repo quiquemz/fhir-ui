@@ -1,16 +1,66 @@
-/* Angular Material global styles */
+// ============================================================================
+// Global Styles — PDMS Developer Portal
+// ============================================================================
+@use 'styles/tokens';
+@use 'styles/theme';
+
+// ---------- Base ----------
 html,
 body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+// ---------- Smooth theme transitions ----------
+// Only apply to specific elements that need theme transitions.
+// Avoid html * {} — it breaks CDK overlay positioning.
+html,
+body,
+.mat-sidenav,
+.mat-sidenav-content,
+.mat-mdc-card,
+.mat-mdc-table,
+.mat-mdc-header-cell,
+.mat-mdc-cell,
+.mat-mdc-row,
+.mat-mdc-paginator,
+.mat-toolbar,
+a {
+  transition:
+    background-color var(--transition-speed) ease,
+    color var(--transition-speed) ease,
+    border-color var(--transition-speed) ease;
+}
+
+// ---------- Scrollbar ----------
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+}
+
+// ---------- Buttons ----------
 button {
   margin-left: 4px;
 }
 
-/* Replacement for cx-button-with-icon / cx-icon-in-button */
 .button-with-icon {
   display: inline-flex !important;
   align-items: center;
@@ -23,12 +73,48 @@ button {
   width: 20px;
 }
 
-/* Table styles */
-.mat-mdc-row:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-  cursor: pointer;
-}
-
+// ---------- Table styles ----------
 .mat-mdc-header-cell {
   font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.mat-mdc-cell {
+  color: var(--text-primary);
+}
+
+// ---------- Links ----------
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent-primary-hover);
+    text-decoration: underline;
+  }
+}
+
+// ---------- Selection ----------
+::selection {
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
+}
+
+// ---------- Focus ring ----------
+*:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+// ---------- Material overrides ----------
+.mat-mdc-card {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow) !important;
+  background-color: var(--card-bg);
+}
+
+.mat-mdc-form-field {
+  font-family: 'Inter', sans-serif;
 }

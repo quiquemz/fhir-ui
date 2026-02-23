@@ -1,36 +1,92 @@
 .graph-container {
-	display: flex;
-	text-align: center;
-	height: calc(100vh - 250px);
+  display: flex;
+  text-align: center;
+  height: calc(100vh - 250px);
+  gap: 16px;
 }
 
 .network-graph {
-	width: 100%;
-	border: 1px solid lightgray;
-	margin-top: 10px;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-top: 10px;
+  background-color: var(--bg-surface);
 }
 
 .controls {
-	margin-bottom: 10px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 4px;
+  min-width: 160px;
 }
 
 .controls button {
-	margin: 5px;
-	padding: 5px 10px;
-	font-size: 14px;
-	cursor: pointer;
+  margin: 2px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--bg-hover);
+    border-color: var(--accent-primary);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 }
 
 .controls button:focus {
-	outline: none;
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.controls-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 2px;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: rgba(211, 47, 47, 0.1) !important;
+  border-color: #d32f2f !important;
+  color: #d32f2f;
 }
 
 .resource-view {
-	margin-top: 10px;
-	text-align: left;
-	overflow-y: overlay;
-	width: 33%;
+  margin-top: 10px;
+  text-align: left;
+  overflow-y: auto;
+  width: 33%;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 4px;
+
+  // The JSON viewer inside the graph panel should be seamless
+  app-fhir-json-viewer {
+    .json-viewer {
+      border: none;
+      background-color: transparent;
+      padding: 12px;
+      font-size: 12px;
+    }
+  }
 }

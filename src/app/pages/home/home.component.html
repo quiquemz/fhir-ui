@@ -1,18 +1,29 @@
-<h2>PDMS</h2>
-<section class="features">
-	<h3>Resources</h3>
-	<ul>
-		@for (resource of resources; track $index) {
-			<li>
-				<a [routerLink]="['/', resource.resourceType]">{{ resource.resourceType }}</a>
-			</li>
-		}
-	</ul>
-</section>
-<section class="documentation">
-	<h2>API Documentation</h2>
-	<p>
-		Interested in integrating our API into your application? Check out our documentation and get started!
-		<a routerLink="/openapi">Go to API Documentation</a>
-	</p>
-</section>
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">PDMS</h1>
+      <p class="hero-subtitle"> Patient Data Management System — Browse, search, and manage FHIR resources </p>
+    </div>
+  </section>
+
+  <!-- Resource Cards Grid -->
+  <section class="resources-section">
+    <h2 class="section-title">Resources</h2>
+    <div class="resource-grid">
+      @for (resource of resources; track $index) {
+        <a [routerLink]="['/', resource.resourceType]" class="resource-card-link">
+          <mat-card class="resource-card">
+            <mat-card-content>
+              <div class="card-icon">
+                <mat-icon>{{ resource.icon || 'description' }}</mat-icon>
+              </div>
+              <span class="card-label">{{ resource.resourceType }}</span>
+              <mat-icon class="card-arrow">arrow_forward</mat-icon>
+            </mat-card-content>
+          </mat-card>
+        </a>
+      }
+    </div>
+  </section>
+</div>
