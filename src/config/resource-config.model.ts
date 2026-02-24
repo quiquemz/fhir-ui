@@ -1,45 +1,59 @@
 import { BundleEntry, Resource } from 'fhir/r4';
 import { ColumnConfig } from './column-config.model';
 
+export enum ResourceCategory {
+  Foundation = 'Foundation',
+  Base = 'Base',
+  Clinical = 'Clinical',
+  Financial = 'Financial',
+  Specialized = 'Specialized',
+}
+
 export class ResourceConfig {
-	resourceType: string;
-	columns: ColumnConfig[] = [];
-	patientIdentifierSearchPrefix?: string | undefined;
-	icon?: string;
+  resourceType: string;
+  columns: ColumnConfig[] = [];
+  patientIdentifierSearchPrefix?: string | undefined;
+  icon?: string;
+  category?: ResourceCategory;
 
-	constructor(resourceType: string) {
-		this.resourceType = resourceType;
-	}
+  constructor(resourceType: string) {
+    this.resourceType = resourceType;
+  }
 
-	addColumn(
-		header: string,
-		cell: (resource: any) => any,
-		filterName: string = '',
-		filters: string[] = [],
-		sortBy: string = '',
-	): ResourceConfig {
-		this.columns.push(new ColumnConfig(header, cell).withFilter(filterName, filters).withSortBy(sortBy));
-		return this;
-	}
+  addColumn(
+    header: string,
+    cell: (resource: any) => any,
+    filterName: string = '',
+    filters: string[] = [],
+    sortBy: string = '',
+  ): ResourceConfig {
+    this.columns.push(new ColumnConfig(header, cell).withFilter(filterName, filters).withSortBy(sortBy));
+    return this;
+  }
 
-	addLastUpdatedColumn(): ResourceConfig {
-		this.addColumn(
-			'Last Updated',
-			({ resource }: BundleEntry) => resource?.meta?.lastUpdated?.substring(0, 19),
-			undefined,
-			undefined,
-			'_lastUpdated',
-		);
-		return this;
-	}
+  addLastUpdatedColumn(): ResourceConfig {
+    this.addColumn(
+      'Last Updated',
+      ({ resource }: BundleEntry) => resource?.meta?.lastUpdated?.substring(0, 19),
+      undefined,
+      undefined,
+      '_lastUpdated',
+    );
+    return this;
+  }
 
-	withIcon(icon: string): ResourceConfig {
-		this.icon = icon;
-		return this;
-	}
+  withIcon(icon: string): ResourceConfig {
+    this.icon = icon;
+    return this;
+  }
 
-	withPatientIdentifierSearchPrefix(prefix: string): ResourceConfig {
-		this.patientIdentifierSearchPrefix = prefix;
-		return this;
-	}
+  withCategory(category: ResourceCategory): ResourceConfig {
+    this.category = category;
+    return this;
+  }
+
+  withPatientIdentifierSearchPrefix(prefix: string): ResourceConfig {
+    this.patientIdentifierSearchPrefix = prefix;
+    return this;
+  }
 }

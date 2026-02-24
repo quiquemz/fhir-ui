@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+    <defs>
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#1a237e;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+
+    <!-- Dark background -->
+    <circle cx="16" cy="16" r="15.5" fill="url(#bgGrad)" />
+
+    <!-- Lego-style flame blocks -->
+    <g>
+        <!-- Bottom layer - Red blocks -->
+        <rect x="11" y="23" width="3.5" height="3.5" rx="0.3" fill="#ff1744" stroke="#c41c00" stroke-width="0.4" />
+        <rect x="14.5" y="23" width="3.5" height="3.5" rx="0.3" fill="#d32f2f" stroke="#b71c1c" stroke-width="0.4" />
+        <rect x="18" y="23" width="3.5" height="3.5" rx="0.3" fill="#ff1744" stroke="#c41c00" stroke-width="0.4" />
+
+        <!-- Second layer - Orange-red blocks -->
+        <rect x="12" y="19.5" width="3" height="3" rx="0.3" fill="#ff5722" stroke="#d84315" stroke-width="0.4" />
+        <rect x="15" y="19.5" width="3" height="3" rx="0.3" fill="#ff3d00" stroke="#dd2c00" stroke-width="0.4" />
+        <rect x="18" y="19.5" width="3" height="3" rx="0.3" fill="#ff5722" stroke="#d84315" stroke-width="0.4" />
+
+        <!-- Third layer - Orange blocks -->
+        <rect x="13" y="16.5" width="2.5" height="2.5" rx="0.3" fill="#ff9800" stroke="#ef6c00" stroke-width="0.4" />
+        <rect x="15.5" y="16.5" width="2.5" height="2.5" rx="0.3" fill="#ff6f00" stroke="#e65100" stroke-width="0.4" />
+        <rect x="18" y="16.5" width="2.5" height="2.5" rx="0.3" fill="#ff9800" stroke="#ef6c00" stroke-width="0.4" />
+
+        <!-- Fourth layer - Yellow-orange blocks -->
+        <rect x="14" y="14" width="2.5" height="2.5" rx="0.3" fill="#ffb300" stroke="#ff8f00" stroke-width="0.4" />
+        <rect x="16.5" y="14" width="2.5" height="2.5" rx="0.3" fill="#ffc107" stroke="#ffa000" stroke-width="0.4" />
+
+        <!-- Top layer - Yellow blocks (flame tip) -->
+        <rect x="15" y="11.5" width="2" height="2" rx="0.3" fill="#ffeb3b" stroke="#fbc02d" stroke-width="0.4" />
+        <rect x="17" y="11.5" width="2" height="2" rx="0.3" fill="#fff176" stroke="#fdd835" stroke-width="0.4" />
+
+        <!-- Flame tip - bright yellow -->
+        <rect x="16" y="9" width="2" height="2" rx="0.3" fill="#ffff8d" stroke="#ffee58" stroke-width="0.4" />
+
+        <!-- Lego studs (small circles on top of blocks) -->
+        <circle cx="12.75" cy="23.8" r="0.4" fill="#ff6f6f" opacity="0.6" />
+        <circle cx="16.25" cy="23.8" r="0.4" fill="#ff5252" opacity="0.6" />
+        <circle cx="19.75" cy="23.8" r="0.4" fill="#ff6f6f" opacity="0.6" />
+
+        <circle cx="13.5" cy="20.3" r="0.35" fill="#ff8a65" opacity="0.6" />
+        <circle cx="16.5" cy="20.3" r="0.35" fill="#ff7043" opacity="0.6" />
+        <circle cx="19.5" cy="20.3" r="0.35" fill="#ff8a65" opacity="0.6" />
+
+        <circle cx="14.25" cy="17.3" r="0.3" fill="#ffb74d" opacity="0.6" />
+        <circle cx="16.75" cy="17.3" r="0.3" fill="#ffa726" opacity="0.6" />
+
+        <circle cx="15.25" cy="14.8" r="0.3" fill="#ffca28" opacity="0.6" />
+        <circle cx="17.75" cy="14.8" r="0.3" fill="#ffd54f" opacity="0.6" />
+    </g>
+</svg>

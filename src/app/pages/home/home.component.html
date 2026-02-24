@@ -7,23 +7,25 @@
     </div>
   </section>
 
-  <!-- Resource Cards Grid -->
-  <section class="resources-section">
-    <h2 class="section-title">Resources</h2>
-    <div class="resource-grid">
-      @for (resource of resources; track $index) {
-        <a [routerLink]="['/', resource.resourceType]" class="resource-card-link">
-          <mat-card class="resource-card">
-            <mat-card-content>
-              <div class="card-icon">
-                <mat-icon>{{ resource.icon || 'description' }}</mat-icon>
-              </div>
-              <span class="card-label">{{ resource.resourceType }}</span>
-              <mat-icon class="card-arrow">arrow_forward</mat-icon>
-            </mat-card-content>
-          </mat-card>
-        </a>
-      }
-    </div>
-  </section>
+  <!-- Resource Cards Grid Grouped by Category -->
+  @for (category of categories(); track category) {
+    <section class="resources-section">
+      <h2 class="section-title">{{ category }}</h2>
+      <div class="resource-grid">
+        @for (resource of groupedResources().get(category); track resource.resourceType) {
+          <a [routerLink]="['/', resource.resourceType]" class="resource-card-link">
+            <mat-card class="resource-card">
+              <mat-card-content>
+                <div class="card-icon">
+                  <mat-icon>{{ resource.icon || 'description' }}</mat-icon>
+                </div>
+                <span class="card-label">{{ resource.resourceType }}</span>
+                <mat-icon class="card-arrow">arrow_forward</mat-icon>
+              </mat-card-content>
+            </mat-card>
+          </a>
+        }
+      </div>
+    </section>
+  }
 </div>

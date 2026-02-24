@@ -19,3 +19,6 @@ Source of truth for near-term work items. (Mirrors the Copilot TODO tracker used
 - [ ] 7. Add missing resources
 - [ ] 8. Categorize resources according to FHIR spec (e.g., Clinical, Administrative)
   - Notes: Define categories and update resource list UI to reflect them.
+- [ ] 9. Add support for changing server base URL
+  - Notes: Define UI for inputting new URL and handling connection errors.
+- [ ] 10. Add support for resource navigation in table

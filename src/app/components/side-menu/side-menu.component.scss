@@ -7,7 +7,7 @@ mat-nav-list {
   padding-top: 4px;
 
   a {
-    margin: 2px 8px;
+    margin: 2px 0;
     border-radius: var(--radius-sm);
     color: var(--sidebar-text);
     letter-spacing: -0.01em;
@@ -34,5 +34,41 @@ mat-nav-list {
 
   mat-icon {
     color: var(--sidebar-active-icon) !important;
+  }
+}
+
+.category-panels {
+  padding: 8px;
+
+  mat-expansion-panel {
+    background-color: transparent;
+    box-shadow: none;
+    margin-bottom: 8px;
+
+    &::before {
+      display: none;
+    }
+
+    mat-expansion-panel-header {
+      padding: 0 12px;
+      height: 36px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+
+      &:hover {
+        background-color: transparent !important;
+      }
+    }
+
+    ::ng-deep .mat-expansion-panel-body {
+      padding-left: 0 !important;
+    }
+
+    mat-nav-list {
+      padding: 4px 0;
+    }
   }
 }

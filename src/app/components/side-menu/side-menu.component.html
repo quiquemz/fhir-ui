@@ -3,11 +3,22 @@
     <mat-icon matListItemIcon>home</mat-icon>
     <span matListItemTitle>Home</span>
   </a>
-
-  @for (resource of resources; track resource) {
-    <a mat-list-item routerLink="{{ resource.resourceType }}" routerLinkActive="active-link">
-      <mat-icon matListItemIcon>{{ resource.icon }}</mat-icon>
-      <span matListItemTitle>{{ resource.resourceType }}</span>
-    </a>
-  }
 </mat-nav-list>
+
+<div class="category-panels">
+  @for (category of categories(); track category) {
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ category }}</mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-nav-list>
+        @for (resource of groupedResources().get(category); track resource.resourceType) {
+          <a mat-list-item routerLink="{{ resource.resourceType }}" routerLinkActive="active-link">
+            <mat-icon matListItemIcon>{{ resource.icon }}</mat-icon>
+            <span matListItemTitle>{{ resource.resourceType }}</span>
+          </a>
+        }
+      </mat-nav-list>
+    </mat-expansion-panel>
+  }
+</div>

@@ -19,7 +19,9 @@ import {
   ServiceRequest,
   Task,
 } from 'fhir/r4';
-import { ResourceConfig } from './resource-config.model';
+import { ResourceConfig, ResourceCategory } from './resource-config.model';
+
+export { ResourceConfig, ResourceCategory } from './resource-config.model';
 
 export const resources = [
   new ResourceConfig('Patient')
@@ -47,7 +49,8 @@ export const resources = [
     .addColumn('External ID', ({ resource }: BundleEntry<Patient>) => resource?.identifier?.at(0)?.value)
     .addLastUpdatedColumn()
     .withPatientIdentifierSearchPrefix('identifier')
-    .withIcon('person'),
+    .withIcon('person')
+    .withCategory(ResourceCategory.Base),
 
   new ResourceConfig('Practitioner')
     .addColumn('ID', ({ resource }: BundleEntry<Practitioner>) => resource?.id)
@@ -73,7 +76,8 @@ export const resources = [
     ])
     .addColumn('External ID', ({ resource }: BundleEntry<Practitioner>) => resource?.identifier?.at(0)?.value)
     .addLastUpdatedColumn()
-    .withIcon('badge'),
+    .withIcon('badge')
+    .withCategory(ResourceCategory.Base),
 
   new ResourceConfig('Organization')
     .addColumn('Name', ({ resource }: BundleEntry<Organization>) => resource?.name)
@@ -87,7 +91,8 @@ export const resources = [
       return address ? `${address.line?.join(' ')}, ${address.city}, ${address.state}, ${address.postalCode}` : '';
     })
     .addLastUpdatedColumn()
-    .withIcon('apartment'),
+    .withIcon('apartment')
+    .withCategory(ResourceCategory.Base),
 
   new ResourceConfig('Observation')
     .addColumn('ID', ({ resource }: BundleEntry<Observation>) => resource?.id)
@@ -100,7 +105,8 @@ export const resources = [
     .addColumn('Subject', ({ resource }: BundleEntry<Observation>) => resource?.subject?.reference)
     .addLastUpdatedColumn()
     .withPatientIdentifierSearchPrefix('subject:Patient.identifier')
-    .withIcon('visibility'),
+    .withIcon('visibility')
+    .withCategory(ResourceCategory.Clinical),
 
   new ResourceConfig('Device')
     .addColumn('ID', ({ resource }: BundleEntry<Device>) => resource?.id)
@@ -108,7 +114,8 @@ export const resources = [
     .addColumn('External ID', ({ resource }: BundleEntry<Device>) => resource?.identifier?.at(0)?.value)
     .addColumn('External System', ({ resource }: BundleEntry<Device>) => resource?.identifier?.at(0)?.system)
     .addLastUpdatedColumn()
-    .withIcon('devices'),
+    .withIcon('devices')
+    .withCategory(ResourceCategory.Base),
 
   new ResourceConfig('DeviceRequest')
     .addColumn('Reference', ({ resource }: BundleEntry<DeviceRequest>) => resource?.codeReference?.reference)
@@ -116,7 +123,8 @@ export const resources = [
     .addColumn('Intent', ({ resource }: BundleEntry<DeviceRequest>) => resource?.intent)
     .addLastUpdatedColumn()
     .withPatientIdentifierSearchPrefix('subject:Patient.identifier')
-    .withIcon('devices'),
+    .withIcon('devices')
+    .withCategory(ResourceCategory.Clinical),
 
   new ResourceConfig('EpisodeOfCare')
     .addColumn('ID', ({ resource }: BundleEntry<EpisodeOfCare>) => resource?.id)
@@ -125,7 +133,8 @@ export const resources = [
     .addColumn('End Date', ({ resource }: BundleEntry<EpisodeOfCare>) => resource?.period?.end?.substring(0, 19))
     .addLastUpdatedColumn()
     .withPatientIdentifierSearchPrefix('patient:Patient.identifier')
-    .withIcon('calendar_today'),
+    .withIcon('calendar_today')
+    .withCategory(ResourceCategory.Base),
 
   new ResourceConfig('Encounter')
     .addColumn('ID', ({ resource }: BundleEntry<Encounter>) => resource?.id)
@@ -141,7 +150,8 @@ export const resources = [
     .addColumn('End Date', ({ resource }: BundleEntry<Encounter>) => resource?.period?.end?.substring(0, 19))
     .addLastUpdatedColumn()
     .withPatientIdentifierSearchPrefix('subject:Patient.identifier')
-    .withIcon('airline_seat_flat'),
+    .withIcon('airline_seat_flat')
+    .withCategory(ResourceCategory.Base),
 
   new ResourceConfig('Procedure')
     .addColumn('ID', ({ resource }: BundleEntry<Procedure>) => resource?.id)
@@ -156,7 +166,8 @@ export const resources = [
     .addColumn('End Date', ({ resource }: BundleEntry<Procedure>) => resource?.performedPeriod?.end?.substring(0, 19))
     .addLastUpdatedColumn()
     .withPatientIdentifierSearchPrefix('subject:Patient.identifier')
-    .withIcon('medical_services'),
+    .withIcon('medical_services')
+    .withCategory(ResourceCategory.Clinical),
 
   new ResourceConfig('CarePlan')
     .addColumn('ID', ({ resource }: BundleEntry<CarePlan>) => resource?.id)
@@ -168,33 +179,38 @@ export const resources = [
     .addColumn('Intent', ({ resource }: BundleEntry<CarePlan>) => resource?.intent)
     .addLastUpdatedColumn()
     .withPatientIdentifierSearchPrefix('subject:Patient.identifier')
-    .withIcon('assignment'),
+    .withIcon('assignment')
+    .withCategory(ResourceCategory.Clinical),
 
   new ResourceConfig('Task')
     .addColumn('ID', ({ resource }: BundleEntry<Task>) => resource?.id)
     .addColumn('Status', ({ resource }: BundleEntry<Task>) => resource?.status)
     .addLastUpdatedColumn()
-    .withIcon('checklist'),
+    .withIcon('checklist')
+    .withCategory(ResourceCategory.Base),
 
   new ResourceConfig('Location')
     .addColumn('ID', ({ resource }: BundleEntry<Location>) => resource?.id)
     .addColumn('Name', ({ resource }: BundleEntry<Location>) => resource?.name)
     .addLastUpdatedColumn()
-    .withIcon('location_on'),
+    .withIcon('location_on')
+    .withCategory(ResourceCategory.Base),
 
   new ResourceConfig('ClinicalImpression')
     .addColumn('ID', ({ resource }: BundleEntry<ClinicalImpression>) => resource?.id)
     .addColumn('Status', ({ resource }: BundleEntry<ClinicalImpression>) => resource?.status)
     .addColumn('Description', ({ resource }: BundleEntry<ClinicalImpression>) => resource?.description)
     .addLastUpdatedColumn()
-    .withIcon('preview'),
+    .withIcon('preview')
+    .withCategory(ResourceCategory.Clinical),
 
   new ResourceConfig('AllergyIntolerance')
     .addColumn('ID', ({ resource }: BundleEntry<AllergyIntolerance>) => resource?.id)
     .addColumn('Type', ({ resource }: BundleEntry<AllergyIntolerance>) => resource?.type)
     .addColumn('Category', ({ resource }: BundleEntry<AllergyIntolerance>) => resource?.category)
     .addLastUpdatedColumn()
-    .withIcon('healing'),
+    .withIcon('healing')
+    .withCategory(ResourceCategory.Clinical),
 
   new ResourceConfig('Condition')
     .addColumn('ID', ({ resource }: BundleEntry<Condition>) => resource?.id)
@@ -210,7 +226,8 @@ export const resources = [
     )
     .addLastUpdatedColumn()
     .withPatientIdentifierSearchPrefix('subject:Patient.identifier')
-    .withIcon('health_and_safety'),
+    .withIcon('health_and_safety')
+    .withCategory(ResourceCategory.Clinical),
 
   new ResourceConfig('ServiceRequest')
     .addColumn('ID', ({ resource }: BundleEntry<ServiceRequest>) => resource?.id)
@@ -218,5 +235,6 @@ export const resources = [
     .addColumn('Intent', ({ resource }: BundleEntry<ServiceRequest>) => resource?.intent)
     .addColumn('Priority', ({ resource }: BundleEntry<ServiceRequest>) => resource?.priority)
     .withIcon('description')
-    .addLastUpdatedColumn(),
+    .addLastUpdatedColumn()
+    .withCategory(ResourceCategory.Clinical),
 ];

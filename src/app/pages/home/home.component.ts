@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { resources } from '../../../config/resource-configs';
+import { resources, ResourceConfig, ResourceCategory } from '../../../config/resource-configs';
 
 @Component({
   selector: 'app-home',
@@ -14,4 +14,18 @@ import { resources } from '../../../config/resource-configs';
 })
 export class HomeComponent {
   resources = resources;
+
+  groupedResources = computed(() => {
+    const groups = new Map<ResourceCategory, ResourceConfig[]>();
+    this.resources.forEach((resource) => {
+      const category = resource.category || ResourceCategory.Base;
+      if (!groups.has(category)) {
+        groups.set(category, []);
+      }
+      groups.get(category)!.push(resource);
+    });
+    return groups;
+  });
+
+  categories = computed(() => Array.from(this.groupedResources().keys()));
 }
