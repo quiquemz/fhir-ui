@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { ENVIRONMENT } from '../environment-token';
 
 @Injectable({ providedIn: 'root' })
-export class PdmsService {
+export class FhirService {
   private baseUrl = '/api';
   private headers = new HttpHeaders({
     'Content-Type': 'application/fhir+json',
@@ -13,7 +13,7 @@ export class PdmsService {
 
   constructor(private http: HttpClient) {
     const environment = inject(ENVIRONMENT);
-    this.baseUrl = environment.apiConfig.pdms.uri;
+    this.baseUrl = environment.apiConfig.fhir.uri;
   }
 
   getByReference(reference: string): Observable<Resource> {

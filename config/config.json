@@ -1,7 +1,7 @@
 {
 	"production": false,
 	"apiConfig": {
-		"pdms": {
+		"fhir": {
 			"uri": "/api"
 		}
 	}

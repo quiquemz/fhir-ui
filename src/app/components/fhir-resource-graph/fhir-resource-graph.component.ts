@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, effect } from '@angular/core';
 import { Bundle, BundleEntry, DomainResource } from 'fhir/r4';
 import { DataSet, Network, Node as VisNode, Edge, IdType } from 'vis-network/standalone/esm/vis-network';
-import { PdmsService } from '../../services/pdms.service';
+import { FhirService } from '../../services/fhir.service';
 import { ThemeService } from '../../services/theme.service';
 import { JsonPipe } from '@angular/common';
 import { FhirJsonViewerComponent } from '../fhir-json-viewer/fhir-json-viewer.component';
@@ -78,7 +78,7 @@ export class FhirResourceGraphComponent implements OnInit {
   private edges!: DataSet<Edge>;
 
   constructor(
-    private pdmsService: PdmsService,
+    private fhirService: FhirService,
     private themeService: ThemeService,
   ) {
     effect(() => {
@@ -218,7 +218,7 @@ export class FhirResourceGraphComponent implements OnInit {
 
     const references = this.findReferences(this.selectedResource);
     for (const ref of references) {
-      this.pdmsService.getByReference(ref).subscribe((resource) => {
+      this.fhirService.getByReference(ref).subscribe((resource) => {
         this.addNodeWithEdge(resource, this.selectedNode?.id, 'direct');
       });
     }
@@ -239,7 +239,7 @@ export class FhirResourceGraphComponent implements OnInit {
       const searchParams: { [key: string]: string[] } = {};
       searchParams[searchByPrefix] = [resourceId];
 
-      this.pdmsService.getAll(resourceType, '', 10, searchParams).subscribe((resources) => {
+      this.fhirService.getAll(resourceType, '', 10, searchParams).subscribe((resources) => {
         if (
           resources == null ||
           resources.entry == null ||
@@ -263,7 +263,7 @@ export class FhirResourceGraphComponent implements OnInit {
       return;
     }
 
-    this.pdmsService
+    this.fhirService
       .getEverythingById(resource.resourceType, resource.id, '')
       .pipe(
         expand((response) => {
@@ -279,7 +279,7 @@ export class FhirResourceGraphComponent implements OnInit {
             return EMPTY;
           }
 
-          return this.pdmsService.getEverythingById(resource!.resourceType, resource!.id!, nextToken);
+          return this.fhirService.getEverythingById(resource!.resourceType, resource!.id!, nextToken);
         }),
         reduce((acc: BundleEntry<DomainResource>[], current: Bundle<DomainResource>) => {
           return [...acc, ...(current.entry || [])];

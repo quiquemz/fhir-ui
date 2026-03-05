@@ -6,11 +6,9 @@ import { AllResourcesComponent } from './pages/all-resources/all-resources.compo
 import { ResourceFullHistoryComponent } from './pages/resource-full-history/resource-full-history.component';
 import { ResourceDetailComponent } from './pages/resource-detail/resource-detail.component';
 import { ResourceVersionDetailComponent } from './pages/resource-version-detail/resource-version-detail.component';
-import { ApiComponent } from './api/api.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'openapi', component: ApiComponent },
   { path: 'home', component: HomeComponent },
   ...resourcesConfig.map(({ resourceType, columns, patientIdentifierSearchPrefix }) => ({
     path: resourceType,
