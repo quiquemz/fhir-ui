@@ -1,8 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Bundle, DomainResource, Resource } from 'fhir/r4';
 import { Observable } from 'rxjs';
-import { ENVIRONMENT } from '../environment-token';
 
 @Injectable({ providedIn: 'root' })
 export class FhirService {
@@ -11,10 +10,7 @@ export class FhirService {
     'Content-Type': 'application/fhir+json',
   });
 
-  constructor(private http: HttpClient) {
-    const environment = inject(ENVIRONMENT);
-    this.baseUrl = environment.apiConfig.fhir.uri;
-  }
+  constructor(private http: HttpClient) {}
 
   getByReference(reference: string): Observable<Resource> {
     const url = `${this.baseUrl}/${reference}`;

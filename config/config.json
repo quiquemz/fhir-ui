@@ -1,8 +1,0 @@
-{
-	"production": false,
-	"apiConfig": {
-		"fhir": {
-			"uri": "/api"
-		}
-	}
-}

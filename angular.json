@@ -74,28 +74,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "local": {
-              "buildTarget": "fhir-ui:build:development",
-              "proxyConfig": "src/proxy/proxy.conf.json"
-            },
-            "dev": {
-              "buildTarget": "fhir-ui:build:production",
-              "proxyConfig": "src/proxy/proxy.conf.dev.json"
-            },
-            "qas": {
-              "buildTarget": "fhir-ui:build:production",
-              "proxyConfig": "src/proxy/proxy.conf.qas.json"
-            },
-            "sbx": {
-              "buildTarget": "fhir-ui:build:production",
-              "proxyConfig": "src/proxy/proxy.conf.sbx.json"
-            },
             "fhir": {
               "buildTarget": "fhir-ui:build:development",
               "proxyConfig": "src/proxy/proxy.conf.fhir.json"
             }
           },
-          "defaultConfiguration": "local"
+          "defaultConfiguration": "fhir"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
