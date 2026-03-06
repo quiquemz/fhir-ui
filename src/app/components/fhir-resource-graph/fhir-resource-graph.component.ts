@@ -62,7 +62,7 @@ interface Node extends VisNode {
 @Component({
   selector: 'app-fhir-resource-graph',
   standalone: true,
-  imports: [JsonPipe, FhirJsonViewerComponent, MatIconModule],
+  imports: [FhirJsonViewerComponent, MatIconModule],
   templateUrl: './fhir-resource-graph.component.html',
   styleUrl: './fhir-resource-graph.component.scss',
 })

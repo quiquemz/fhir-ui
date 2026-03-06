@@ -1,11 +1,10 @@
 import { Component, Input, QueryList, ViewChildren } from '@angular/core';
-import { JsonPipe, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'app-fhir-json-viewer',
 	standalone: true,
-	imports: [JsonPipe, RouterLink, NgIf],
+	imports: [RouterLink],
 	templateUrl: './fhir-json-viewer.component.html',
 	styleUrl: './fhir-json-viewer.component.scss',
 })

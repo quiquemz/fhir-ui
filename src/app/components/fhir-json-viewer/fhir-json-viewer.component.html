@@ -1,44 +1,50 @@
 <div class="json-viewer">
-	@if (treeDepth === 0) {
-		<div class="controls">
-			<button (click)="expandAll()">Expand All</button>
-			<button (click)="collapseAll()">Collapse All</button>
-		</div>
-	}
-	@if (resource && isObject(resource)) {
-		@for (key of getKeys(resource); track key) {
-			@if (key !== 'resourceType') {
-				<div>
-					<span *ngIf="isKeyANumber(key)" class="json-key-index" (click)="toggleExpand(key)">[{{ key }}]:</span>
-					<span *ngIf="!isKeyANumber(key)" class="json-key" (click)="toggleExpand(key)">{{ key }}:</span>
+  @if (treeDepth === 0) {
+    <div class="controls">
+      <button (click)="expandAll()">Expand All</button>
+      <button (click)="collapseAll()">Collapse All</button>
+    </div>
+  }
+  @if (resource && isObject(resource)) {
+    @for (key of getKeys(resource); track key) {
+      @if (key !== 'resourceType') {
+        <div>
+          @if (isKeyANumber(key)) {
+            <span class="json-key-index" (click)="toggleExpand(key)">[{{ key }}]:</span>
+          }
+          @if (!isKeyANumber(key)) {
+            <span class="json-key" (click)="toggleExpand(key)">{{ key }}:</span>
+          }
 
-					@if (isCollapsed[key]) {
-						<span *ngIf="isCollapsed[key]">...</span>
-					} @else {
-						@if (isObject(resource[key])) {
-							<div class="json-value">
-								<app-fhir-json-viewer [resource]="resource[key]" [treeDepth]="treeDepth + 1"></app-fhir-json-viewer>
-							</div>
-						} @else {
-							@if (key === 'id') {
-								<span>
-									<a routerLink="/{{ resource.resourceType }}/{{ resource[key] }}">{{ resource[key] }}</a>
-								</span>
-							} @else if (key === 'reference') {
-								<span>
-									<a routerLink="/{{ resource[key] }}">{{ resource[key] }}</a>
-								</span>
-							} @else {
-								<span>{{ resource[key] }}</span>
-							}
-						}
-					}
-				</div>
-			}
-		} @empty {
-			<p>No data available.</p>
-		}
-	} @else {
-		<p>Resource not loaded</p>
-	}
+          @if (isCollapsed[key]) {
+            @if (isCollapsed[key]) {
+              <span>...</span>
+            }
+          } @else {
+            @if (isObject(resource[key])) {
+              <div class="json-value">
+                <app-fhir-json-viewer [resource]="resource[key]" [treeDepth]="treeDepth + 1"></app-fhir-json-viewer>
+              </div>
+            } @else {
+              @if (key === 'id') {
+                <span>
+                  <a routerLink="/{{ resource.resourceType }}/{{ resource[key] }}">{{ resource[key] }}</a>
+                </span>
+              } @else if (key === 'reference') {
+                <span>
+                  <a routerLink="/{{ resource[key] }}">{{ resource[key] }}</a>
+                </span>
+              } @else {
+                <span>{{ resource[key] }}</span>
+              }
+            }
+          }
+        </div>
+      }
+      } @empty {
+      <p>No data available.</p>
+    }
+  } @else {
+    <p>Resource not loaded</p>
+  }
 </div>

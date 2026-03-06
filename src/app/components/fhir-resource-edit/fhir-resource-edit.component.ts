@@ -13,7 +13,7 @@ import { JsonPipe } from '@angular/common';
 @Component({
   selector: 'app-fhir-resource-edit',
   standalone: true,
-  imports: [FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule, JsonPipe],
+  imports: [FormsModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule],
   templateUrl: './fhir-resource-edit.component.html',
   styleUrl: './fhir-resource-edit.component.scss',
 })
