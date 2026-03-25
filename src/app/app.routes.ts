@@ -6,10 +6,12 @@ import { AllResourcesComponent } from './pages/all-resources/all-resources.compo
 import { ResourceFullHistoryComponent } from './pages/resource-full-history/resource-full-history.component';
 import { ResourceDetailComponent } from './pages/resource-detail/resource-detail.component';
 import { ResourceVersionDetailComponent } from './pages/resource-version-detail/resource-version-detail.component';
+import { ServerConfigComponent } from './pages/server-config/server-config.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'settings', component: ServerConfigComponent },
   ...resourcesConfig.map(({ resourceType, columns, patientIdentifierSearchPrefix }) => ({
     path: resourceType,
     children: [

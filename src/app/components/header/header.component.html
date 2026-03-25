@@ -4,6 +4,10 @@
   </button>
   <span class="header-logo-badge">FHIR</span>
   <span class="header-title">Developer Portal</span>
+  <a routerLink="/settings" class="env-badge" [matTooltip]="serverConfigService.activeServer().url">
+    <mat-icon class="env-badge-icon">dns</mat-icon>
+    {{ serverConfigService.activeServer().name }}
+  </a>
   <span class="spacer"></span>
   <button
     mat-icon-button
