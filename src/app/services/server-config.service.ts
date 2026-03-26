@@ -1,4 +1,8 @@
-import { Injectable, computed, effect, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, OnDestroy, computed, effect, inject, signal } from '@angular/core';
+import { Subscription, timer } from 'rxjs';
+
+export type ServerHealthStatus = 'testing' | 'success' | 'error';
 
 export interface ServerConfig {
   id: string;
@@ -8,6 +12,8 @@ export interface ServerConfig {
 
 const SERVERS_KEY = 'fhir-server-configs';
 const ACTIVE_KEY = 'fhir-active-server';
+
+const POLL_INTERVAL_MS = 5_000;
 
 const DEFAULT_SERVER: ServerConfig = {
   id: 'default',
@@ -22,15 +28,21 @@ const AZURE_SERVER: ServerConfig = {
 };
 
 @Injectable({ providedIn: 'root' })
-export class ServerConfigService {
+export class ServerConfigService implements OnDestroy {
+  private readonly http = inject(HttpClient);
+
   readonly servers = signal<ServerConfig[]>(this.loadServers());
   readonly activeServerId = signal<string>(this.loadActiveId());
+  readonly serverHealth = signal<Record<string, ServerHealthStatus>>({});
 
   readonly activeServer = computed(
     () => this.servers().find((s) => s.id === this.activeServerId()) ?? this.servers()[0],
   );
 
   readonly baseUrl = computed(() => this.activeServer()?.url ?? '/api');
+
+  private readonly pollSub: Subscription;
+  private readonly slowTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
   constructor() {
     effect(() => {
@@ -39,15 +51,55 @@ export class ServerConfigService {
     effect(() => {
       localStorage.setItem(ACTIVE_KEY, this.activeServerId());
     });
+    this.pollSub = timer(0, POLL_INTERVAL_MS).subscribe(() => this.servers().forEach((s) => this.testServer(s)));
+  }
+
+  ngOnDestroy(): void {
+    this.pollSub.unsubscribe();
+    this.slowTimers.forEach((t) => clearTimeout(t));
+    this.slowTimers.clear();
+  }
+
+  healthOf(id: string): ServerHealthStatus | null {
+    return this.serverHealth()[id] ?? null;
+  }
+
+  testServer(server: ServerConfig): void {
+    // Only show 'testing' state if the request takes longer than 5s
+    const slowTimer = setTimeout(() => this.serverHealth.update((h) => ({ ...h, [server.id]: 'testing' })), 5_000);
+    this.slowTimers.set(server.id, slowTimer);
+
+    const url = server.url.replace(/\/$/, '') + '/metadata';
+    this.http.get(url, { responseType: 'json' }).subscribe({
+      next: () => {
+        clearTimeout(this.slowTimers.get(server.id));
+        this.slowTimers.delete(server.id);
+        this.serverHealth.update((h) => ({ ...h, [server.id]: 'success' }));
+      },
+      error: () => {
+        clearTimeout(this.slowTimers.get(server.id));
+        this.slowTimers.delete(server.id);
+        this.serverHealth.update((h) => ({ ...h, [server.id]: 'error' }));
+      },
+    });
   }
 
   addServer(name: string, url: string): void {
     const id = crypto.randomUUID();
-    this.servers.update((list) => [...list, { id, name, url }]);
+    const server: ServerConfig = { id, name, url };
+    this.servers.update((list) => [...list, server]);
+    this.testServer(server);
   }
 
   removeServer(id: string): void {
+    clearTimeout(this.slowTimers.get(id));
+    this.slowTimers.delete(id);
     this.servers.update((list) => list.filter((s) => s.id !== id));
+    this.serverHealth.update((h) => {
+      const next = { ...h };
+      delete next[id];
+      return next;
+    });
   }
 
   setActive(id: string): void {

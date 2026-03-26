@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { HttpClient } from '@angular/common/http';
 import { ServerConfig, ServerConfigService } from '../../services/server-config.service';
 
 @Component({
@@ -29,11 +28,9 @@ import { ServerConfig, ServerConfigService } from '../../services/server-config.
 export class ServerConfigComponent {
   readonly serverConfigService = inject(ServerConfigService);
   private readonly snackBar = inject(MatSnackBar);
-  private readonly http = inject(HttpClient);
 
   newName = '';
   newUrl = '';
-  testingId = signal<string | null>(null);
 
   get servers(): ServerConfig[] {
     return this.serverConfigService.servers();
@@ -45,6 +42,10 @@ export class ServerConfigComponent {
 
   isActive(id: string): boolean {
     return this.serverConfigService.activeServerId() === id;
+  }
+
+  healthOf(id: string) {
+    return this.serverConfigService.healthOf(id);
   }
 
   setActive(id: string): void {
@@ -67,21 +68,6 @@ export class ServerConfigComponent {
     const name = this.servers.find((s) => s.id === id)?.name ?? '';
     this.serverConfigService.removeServer(id);
     this.snackBar.open(`Server "${name}" removed`, '', { duration: 2500 });
-  }
-
-  testConnection(server: ServerConfig): void {
-    this.testingId.set(server.id);
-    const metadataUrl = server.url.replace(/\/$/, '') + '/metadata';
-    this.http.get(metadataUrl, { responseType: 'json' }).subscribe({
-      next: () => {
-        this.testingId.set(null);
-        this.snackBar.open(`Connected to "${server.name}" successfully`, '', { duration: 3000 });
-      },
-      error: () => {
-        this.testingId.set(null);
-        this.snackBar.open(`Could not connect to "${server.name}"`, 'Dismiss', { duration: 4000 });
-      },
-    });
   }
 
   canDelete(id: string): boolean {
