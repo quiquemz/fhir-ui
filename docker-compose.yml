@@ -3,6 +3,8 @@ services:
     image: smartonfhir/hapi-5:r4-synthea
     ports:
       - "8080:8080"
+    environment:
+      CORS_ALLOWED_ORIGINS: "*"
     healthcheck:
       test: curl -f http://localhost:8080/hapi-fhir-jpaserver/fhir/metadata || exit 1
       interval: 5s
@@ -16,7 +18,13 @@ services:
       mssql:
         condition: service_healthy
     environment:
-      FHIRServer__Security__Enabled: "false"
+      FhirServer__Security__Enabled: "false"
+      FhirServer__Cors__Origins__0: "*"
+      FhirServer__Cors__Methods__0: "GET"
+      FhirServer__Cors__Methods__1: "POST"
+      FhirServer__Cors__Methods__2: "PUT"
+      FhirServer__Cors__Methods__3: "DELETE"
+      FhirServer__Cors__Headers__0: "*"
       SqlServer__ConnectionString: "Server=mssql;Initial Catalog=FHIR;Persist Security Info=False;User ID=sa;Password=${SA_PASSWORD};MultipleActiveResultSets=False;TrustServerCertificate=true;Connection Timeout=30"
       SqlServer__AllowDatabaseCreation: "true"
       SqlServer__Initialize: "true"
@@ -31,7 +39,7 @@ services:
       timeout: 3s
       retries: 15
       start_period: 5s
-  
+
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
@@ -45,5 +53,3 @@ services:
       timeout: 3s
       retries: 20
       start_period: 5s
-  
-  
