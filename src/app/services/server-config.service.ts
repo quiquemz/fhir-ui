@@ -11,8 +11,14 @@ const ACTIVE_KEY = 'fhir-active-server';
 
 const DEFAULT_SERVER: ServerConfig = {
   id: 'default',
-  name: 'Local',
-  url: '/api',
+  name: 'HAPI (Local)',
+  url: 'http://localhost:8080/hapi-fhir-jpaserver/fhir',
+};
+
+const AZURE_SERVER: ServerConfig = {
+  id: 'azure',
+  name: 'Azure FHIR (Local)',
+  url: 'http://localhost:8081',
 };
 
 @Injectable({ providedIn: 'root' })
@@ -62,7 +68,7 @@ export class ServerConfigService {
     } catch {
       // ignore parse errors
     }
-    return [DEFAULT_SERVER];
+    return [DEFAULT_SERVER, AZURE_SERVER];
   }
 
   private loadActiveId(): string {
