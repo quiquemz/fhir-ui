@@ -5,6 +5,20 @@
   <span class="header-logo-badge">FHIR</span>
   <span class="header-title">Developer Portal</span>
   <span class="spacer"></span>
+  <a routerLink="/settings" class="env-badge" [matTooltip]="serverConfigService.activeServer().url">
+    <span
+      class="env-health-dot"
+      [class.env-health-dot--testing]="
+        serverConfigService.healthOf(serverConfigService.activeServer().id) === 'testing'
+      "
+      [class.env-health-dot--success]="
+        serverConfigService.healthOf(serverConfigService.activeServer().id) === 'success'
+      "
+      [class.env-health-dot--error]="serverConfigService.healthOf(serverConfigService.activeServer().id) === 'error'">
+    </span>
+    <mat-icon class="env-badge-icon">dns</mat-icon>
+    {{ serverConfigService.activeServer().name }}
+  </a>
   <button
     mat-icon-button
     (click)="themeService.toggle()"
