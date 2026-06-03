@@ -144,8 +144,7 @@
         "executor": "@angular-devkit/build-angular:dev-server",
         "configurations": {
           "fhir": {
-            "buildTarget": "fhir-ui:build:development",
-            "proxyConfig": "src/proxy/proxy.conf.fhir.json"
+            "buildTarget": "fhir-ui:build:development"
           }
         },
         "defaultConfiguration": "fhir",

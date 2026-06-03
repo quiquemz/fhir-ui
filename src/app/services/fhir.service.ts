@@ -1,11 +1,17 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Bundle, DomainResource, Resource } from 'fhir/r4';
 import { Observable } from 'rxjs';
+import { ServerConfigService } from './server-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class FhirService {
-  private baseUrl = '/api';
+  private readonly serverConfig = inject(ServerConfigService);
+
+  private get baseUrl(): string {
+    return this.serverConfig.baseUrl();
+  }
+
   private headers = new HttpHeaders({
     'Content-Type': 'application/fhir+json',
   });

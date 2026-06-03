@@ -1,0 +1,90 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="page-header-icon">
+      <mat-icon>dns</mat-icon>
+    </div>
+    <div>
+      <h1 class="page-title">Server Configuration</h1>
+      <p class="page-subtitle">Manage FHIR server connections and switch between environments.</p>
+    </div>
+  </div>
+
+  <!-- Server List -->
+  <section class="section">
+    <h2 class="section-label">Configured Servers</h2>
+    <div class="server-list">
+      @for (server of servers; track server.id) {
+        <mat-card class="server-card" [class.is-active]="isActive(server.id)">
+          <mat-card-content>
+            <div class="server-row">
+              <div class="server-info">
+                <span class="server-name">{{ server.name }}</span>
+                <span class="server-url">{{ server.url }}</span>
+              </div>
+              @if (isActive(server.id)) {
+                <span class="status-chip active-badge">Active</span>
+              }
+              <span
+                class="conn-dot"
+                [class.conn-dot--testing]="healthOf(server.id) === 'testing'"
+                [class.conn-dot--success]="healthOf(server.id) === 'success'"
+                [class.conn-dot--error]="healthOf(server.id) === 'error'"
+                [matTooltip]="
+                  healthOf(server.id) === 'success'
+                    ? 'Reachable'
+                    : healthOf(server.id) === 'error'
+                      ? 'Unreachable'
+                      : 'Testing…'
+                ">
+              </span>
+              <div class="server-actions">
+                <button
+                  mat-stroked-button
+                  [disabled]="isActive(server.id)"
+                  (click)="setActive(server.id)"
+                  matTooltip="Use this server">
+                  <mat-icon>swap_horiz</mat-icon>
+                  Set Active
+                </button>
+                <button
+                  mat-icon-button
+                  [disabled]="!canDelete(server.id)"
+                  (click)="removeServer(server.id)"
+                  matTooltip="Remove server"
+                  class="delete-btn">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- Add Server Form -->
+  <section class="section">
+    <h2 class="section-label">Add Server</h2>
+    <mat-card class="add-card">
+      <mat-card-content>
+        <div class="add-form">
+          <mat-form-field appearance="outline" class="field-name">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="newName" placeholder="e.g. Staging" />
+            <mat-icon matSuffix>label_outline</mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="field-url">
+            <mat-label>Server URL</mat-label>
+            <input matInput [(ngModel)]="newUrl" placeholder="e.g. https://hapi.fhir.org/baseR4" />
+            <mat-icon matSuffix>link</mat-icon>
+          </mat-form-field>
+          <button mat-flat-button class="add-btn" [disabled]="!newName.trim() || !newUrl.trim()" (click)="addServer()">
+            <mat-icon>add</mat-icon>
+            Add Server
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>
