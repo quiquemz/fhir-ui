@@ -1,13 +1,22 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ServerConfig, ServerConfigService } from '../../services/server-config.service';
+import { AuthType, ServerAuth, ServerConfig, ServerConfigService } from '../../services/server-config.service';
+
+const emptyAuth = (): ServerAuth => ({
+  type: 'none',
+  clientId: '',
+  clientSecret: '',
+  tokenUrl: '',
+  scope: '',
+});
 
 @Component({
   selector: 'app-server-config',
@@ -19,6 +28,7 @@ import { ServerConfig, ServerConfigService } from '../../services/server-config.
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatTooltipModule,
     MatSnackBarModule,
   ],
@@ -31,6 +41,14 @@ export class ServerConfigComponent {
 
   newName = '';
   newUrl = '';
+  newAuth: ServerAuth = emptyAuth();
+  showNewSecret = signal(false);
+
+  readonly authTypeOptions: { value: AuthType; label: string }[] = [
+    { value: 'none', label: 'No Auth' },
+    { value: 'basic', label: 'Basic Auth' },
+    { value: 'client_credentials', label: 'OAuth2 Client Credentials' },
+  ];
 
   get servers(): ServerConfig[] {
     return this.serverConfigService.servers();
@@ -48,6 +66,12 @@ export class ServerConfigComponent {
     return this.serverConfigService.healthOf(id);
   }
 
+  authLabel(auth: ServerAuth): string {
+    if (auth.type === 'basic') return 'Basic';
+    if (auth.type === 'client_credentials') return 'OAuth2';
+    return 'No Auth';
+  }
+
   setActive(id: string): void {
     this.serverConfigService.setActive(id);
     const name = this.servers.find((s) => s.id === id)?.name ?? '';
@@ -58,9 +82,10 @@ export class ServerConfigComponent {
     const name = this.newName.trim();
     const url = this.newUrl.trim();
     if (!name || !url) return;
-    this.serverConfigService.addServer(name, url);
+    this.serverConfigService.addServer(name, url, { ...this.newAuth });
     this.newName = '';
     this.newUrl = '';
+    this.newAuth = emptyAuth();
     this.snackBar.open(`Server "${name}" added`, '', { duration: 2500 });
   }
 

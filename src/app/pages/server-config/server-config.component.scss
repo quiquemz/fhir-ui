@@ -223,10 +223,52 @@
   min-width: 0;
 }
 
+.server-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .server-name {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.server-client-id {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+// ---------- Auth Badges ----------
+.auth-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  flex-shrink: 0;
+
+  &--none {
+    background-color: var(--bg-elevated);
+    color: var(--text-muted);
+  }
+
+  &--basic {
+    background-color: rgba(217, 119, 6, 0.12);
+    color: #d97706;
+  }
+
+  &--client_credentials {
+    background-color: var(--bg-hover);
+    color: var(--accent-primary);
+  }
+}
+
+[data-theme='dark'] .auth-badge--basic {
+  background-color: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
 }
 
 .server-url {
@@ -264,11 +306,11 @@
   }
 }
 
-.add-form {
+.add-row {
   display: flex;
-  align-items: flex-start;
   gap: 12px;
   flex-wrap: wrap;
+  margin-bottom: 4px;
 }
 
 .field-name {
@@ -281,9 +323,39 @@
   min-width: 200px;
 }
 
-.add-btn {
+.field-auth-type {
+  flex: 1;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.field-client-id {
+  flex: 1;
+  min-width: 180px;
+}
+
+.field-client-secret {
+  flex: 1;
+  min-width: 180px;
+}
+
+.field-token-url {
+  flex: 2;
+  min-width: 240px;
+}
+
+.field-scope {
+  flex: 1;
+  min-width: 160px;
+}
+
+.add-actions {
+  display: flex;
+  justify-content: flex-end;
   margin-top: 4px;
-  height: 56px;
+}
+
+.add-btn {
   background-color: var(--accent-primary) !important;
   color: var(--text-inverse) !important;
 }

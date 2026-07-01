@@ -19,8 +19,14 @@
           <mat-card-content>
             <div class="server-row">
               <div class="server-info">
-                <span class="server-name">{{ server.name }}</span>
+                <div class="server-name-row">
+                  <span class="server-name">{{ server.name }}</span>
+                  <span class="auth-badge auth-badge--{{ server.auth.type }}">{{ authLabel(server.auth) }}</span>
+                </div>
                 <span class="server-url">{{ server.url }}</span>
+                @if (server.auth.type !== 'none' && server.auth.clientId) {
+                  <span class="server-client-id">Client ID: {{ server.auth.clientId }}</span>
+                }
               </div>
               @if (isActive(server.id)) {
                 <span class="status-chip active-badge">Active</span>
@@ -68,7 +74,8 @@
     <h2 class="section-label">Add Server</h2>
     <mat-card class="add-card">
       <mat-card-content>
-        <div class="add-form">
+        <!-- Row 1: Name + URL -->
+        <div class="add-row">
           <mat-form-field appearance="outline" class="field-name">
             <mat-label>Name</mat-label>
             <input matInput [(ngModel)]="newName" placeholder="e.g. Staging" />
@@ -79,7 +86,64 @@
             <input matInput [(ngModel)]="newUrl" placeholder="e.g. https://hapi.fhir.org/baseR4" />
             <mat-icon matSuffix>link</mat-icon>
           </mat-form-field>
-          <button mat-flat-button class="add-btn" [disabled]="!newName.trim() || !newUrl.trim()" (click)="addServer()">
+        </div>
+
+        <!-- Row 2: Auth type selector -->
+        <div class="add-row">
+          <mat-form-field appearance="outline" class="field-auth-type">
+            <mat-label>Authorization</mat-label>
+            <mat-select [(ngModel)]="newAuth.type">
+              @for (opt of authTypeOptions; track opt.value) {
+                <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Row 3: Client ID + Secret (Basic or OAuth2) -->
+        @if (newAuth.type !== 'none') {
+          <div class="add-row">
+            <mat-form-field appearance="outline" class="field-client-id">
+              <mat-label>Client ID</mat-label>
+              <input matInput [(ngModel)]="newAuth.clientId" autocomplete="off" />
+              <mat-icon matSuffix>badge</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="field-client-secret">
+              <mat-label>Client Secret</mat-label>
+              <input
+                matInput
+                [(ngModel)]="newAuth.clientSecret"
+                [type]="showNewSecret() ? 'text' : 'password'"
+                autocomplete="new-password" />
+              <button mat-icon-button matSuffix (click)="showNewSecret.set(!showNewSecret())" type="button">
+                <mat-icon>{{ showNewSecret() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        }
+
+        <!-- Row 4: Token URL + Scope (OAuth2 only) -->
+        @if (newAuth.type === 'client_credentials') {
+          <div class="add-row">
+            <mat-form-field appearance="outline" class="field-token-url">
+              <mat-label>Token URL</mat-label>
+              <input matInput [(ngModel)]="newAuth.tokenUrl" placeholder="e.g. https://auth.example.com/token" />
+              <mat-icon matSuffix>vpn_key</mat-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="field-scope">
+              <mat-label>Scope (optional)</mat-label>
+              <input matInput [(ngModel)]="newAuth.scope" placeholder="e.g. system/*.read" />
+            </mat-form-field>
+          </div>
+        }
+
+        <!-- Add button -->
+        <div class="add-actions">
+          <button
+            mat-flat-button
+            class="add-btn"
+            [disabled]="!newName.trim() || !newUrl.trim()"
+            (click)="addServer()">
             <mat-icon>add</mat-icon>
             Add Server
           </button>
